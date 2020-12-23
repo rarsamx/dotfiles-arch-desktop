@@ -1,0 +1,21 @@
+if it is graphical
+  and not in tmux
+        the visual is gvimd
+if it is not graphical or is tmux
+    the visual is vimd
+
+==============
+If it is not in tmux
+    if there is no session
+        set to use xterm
+    if no session and does not have arguments
+        just start the cli server
+    else
+        load silent on cli server
+If it is in tmux
+    if there is no session set to split window
+    if it does not have arguments
+        just start the tmx server
+    if it has arguments
+        load silent on tmx server
+
