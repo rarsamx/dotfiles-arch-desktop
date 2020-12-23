@@ -1,0 +1,9 @@
+
+GTK_IM_MODULE	DEFAULT=fcitx
+QT_IM_MODULE	DEFAULT=fcitx
+XMODIFIERS	DEFAULT=\@im=fcitx
+QT_QPA_PLATFORMTHEME    DEFAULT=qt5ct
+JAVA_FONTS=/usr/share/fonts/TTF
+_JAVA_AWT_WM_NONREPARENTING DEFAULT=1
+#_JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on'
+_JAVA_OPTIONS='-Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel'
