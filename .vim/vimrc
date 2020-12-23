@@ -1,0 +1,224 @@
+"------------------------------------------------------------
+" More examples at
+" url: HTTP://vim.wikia.com/wiki/Example_vimrc
+"------------------------------------------------------------
+"
+" ===== Ensure we use Bash as a shell inside vim
+if &shell =~# 'fish$'
+    set shell=bash
+endif
+" ===== end ensuring we use bash as a shell
+
+" ===== GUI configuration 
+if has('gui_running')
+    set guioptions=air
+    set guifont=Ubuntu\ Mono\ 13
+else
+    set t_Co=256
+endif
+" ===== End of GUI configuration
+
+set nocompatible
+filetype plugin on
+filetype plugin indent on
+let g:polyglot_disabled = ['markdown']
+set encoding=utf-8
+set splitright
+set splitbelow
+
+" Highlight line when not editing
+set cursorline
+autocmd InsertLeave,InsertEnter * set cursorline!
+
+" Change cursor share according to mode
+let &t_SI = "\e[5 q"
+let &t_SR = "\e[3 q"
+let &t_EI = "\e[2 q"
+
+" ===== Ensures defaults are being loaded
+unlet! skip_defaults_vim
+source $VIMRUNTIME/defaults.vim
+runtime! archlinux.vim
+" =====
+
+" ===== Key mappings
+" Map space to be the leader key before we map anything else
+map <Space> <Leader>
+
+" Map <CR> (redraw screen) to also turn off search highlighting until the
+" next search
+nnoremap <silent> <CR> :nohl<CR><CR>
+
+" Map <Leader>s to open Startify
+nnoremap <Leader>s  :Startify<CR>
+" Map to cycle buffers
+nnoremap <Leader>b  :bn<CR>
+nnoremap <Leader>B  :bp<CR>
+
+" Map Y to act like D and C, i.e. to yank until EOL, rather than act as yy,
+" which is the default
+map Y y$
+
+" In insert or command mode, move normally by using Ctrl 
+" (Unfortunatelly overrides existing mappings
+" inoremap <C-h> <Left>
+" inoremap <C-j> <C-o>gj
+" inoremap <C-k> <C-o>gk
+" inoremap <C-l> <Right>
+" cnoremap <C-h> <Left>
+" cnoremap <C-j> <C-o>gj
+" cnoremap <C-k> <C-o>gk
+" cnoremap <C-l> <Right>
+" ===== End key mappings
+
+
+" ===== Setup Vim Bundle (vundle)
+filetype off
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+Plugin 'VundleVim/Vundle.vim'
+
+" Add plugins here
+Plugin 'sheerun/vim-polyglot'
+"Plugin 'dag/vim-fish'
+Plugin 'tpope/vim-endwise'
+Plugin 'tpope/vim-commentary'
+Plugin 'tpope/vim-vinegar'
+Plugin 'tpope/vim-fugitive'
+Plugin 'mhinz/vim-startify'
+Plugin 'itchyny/lightline.vim'
+Plugin 'mengelbrecht/lightline-bufferline'
+" Plugin 'jeetsukumaran/vim-buffergator'
+"Plugin 'felixhummel/setcolors.vim'
+"Plugin 'lilydjwg/colorizer' " Only enable it when needed
+" Plugin 'scrooloose/syntastic'
+
+call vundle#end()
+" ===== End Vim Bundle configuration
+
+" ===== Configurations for vim-fish plugin
+syntax enable
+autocmd FileType fish compiler fish
+autocmd FileType fish setlocal textwidth=79 
+autocmd FileType fish setlocal foldlevelstart=99 
+autocmd FileType fish setlocal foldmethod=expr
+" =====
+
+"" ===== Configuration for syntastic plugin
+"" set statusline+=%#warningmsg#
+"" set statusline+=%{SyntasticStatuslineFlag()}
+"" set statusline+=%*
+"" let g:syntastic_always_populate_loc_list = 1
+"" let g:syntastic_auto_loc_list = 1
+"" let g:syntastic_check_on_open = 1
+"" let g:syntastic_check_on_wq = 0
+"" =====
+
+" ===== Configure Lightline and lightline-bufferline
+let g:lightline = {
+      \ 'colorscheme': 'one',
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ], [ 'readonly', 'filename', 'modified' ] ]
+      \ },
+      \ 'tabline': {
+      \   'left': [ ['buffers'] ],
+      \   'right': [ ['close'] ]
+      \ },
+      \ 'component_expand': {
+      \   'buffers': 'lightline#bufferline#buffers'
+      \ },
+      \ 'component_type': {
+      \   'buffers': 'tabsel'
+      \ }
+      \ }
+
+set showtabline=2
+set laststatus=2
+set noshowmode
+" ===== End lightline configuration
+
+"===== Configure buffergator
+" let g:buffergator_viewport_split_policy="N"
+" let g:buffergator_sort_regime="mru"
+" =====
+
+" ===== Rest of favorite configurations to override whatever the plugins did
+
+" Allow changing buffers without saving, the buffer bar will show when its
+" Dirty
+set hidden
+
+" Don't breake lines automatically, setting a value to something different
+" than 0 breaks lines automaticaly
+set textwidth=0
+
+" Highlight searches (use <C-L> to temporarily turn off highlighting; see the
+" mapping of <C-L> below)
+set hlsearch
+
+" When opening a new line and no filetype-specific indenting is enabled, keep
+" the same indent as the line you're currently on. Useful for READMEs, etc.
+set autoindent
+
+" Instead of failing a command because of unsaved changes, instead raise a
+" dialogue asking if you wish to save changed files.
+set confirm
+
+" Disable the beeping
+set vb t_vb=
+
+" Indentation settings for using 4 spaces instead of tabs.
+" Do not change 'tabstop' from its default value of 8 with this setup.
+set shiftwidth=4
+set softtabstop=4
+set expandtab
+
+" Add number to the left of the screen showing relative numebers
+set number
+set relativenumber
+
+" Set the colorscheme
+colorscheme angr
+
+" Allow the left and right arrow move to the previous and next line
+" respectively
+set whichwrap+=<,>,h,l,[,]
+
+set path+=**
+set wildmenu
+
+autocmd FileType netrw setl bufhidden=wipe
+" let g:netrw_banner=0
+let g:netrw_browse_split=0  " opens in prior window
+" let g:netrw_altv=1          " opens splits to the right
+let g:netrw_liststyle=3     " tree view
+" let g:netrw_list_hide=netrw_gitignore#Hide()
+" let g:netrw_list_hide.=',\(^\|\s\s\)\zs\.\S\+'
+
+" ===== 
+
+"------------------------------------------------------------
+" Stop certain movements from always going to the first character of a line.
+" While this behaviour deviates from that of Vi, it does what most users
+" coming from other editors would expect.
+"set nostartofline
+
+" Enable use of the mouse for all modes
+"set mouse=a
+
+" Quickly time out on keycodes, but never time out on mappings
+"set notimeout ttimeout ttimeoutlen=200
+
+" Use <F11> to toggle between 'paste' and 'nopaste'
+"set pastetoggle=<F11>
+
+" Indentation settings for using hard tabs for indent. Display tabs as
+" four characters wide." Display line numbers on the left
+"set shiftwidth=4
+"set tabstop=4
+
+" Set the command window height to 2 lines, to avoid many cases of having to
+" press <Enter> to continue
+"set cmdheight=2
+
+"------------------------------------------------------------
