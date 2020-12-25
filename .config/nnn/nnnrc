@@ -1,5 +1,5 @@
 #export VISUAL=~/bin/vimDetached.sh
-export NNN_PLUG='d:diffs;i:imgview'
+export NNN_PLUG='d:dragdrop;f:diffs;i:imgview;m:nmount-udisk;t:treeview'
 export NNN_ARCHIVE="\\.(7z|a|ace|alz|arc|arj|bz|bz2|cab|cpio|deb|gz|jar|lha|lz|lzh|lzma|lzo|rar|rpm|rz|t7z|tar|tbz|tbz2|tgz|tlz|txz|tZ|tzo|war|xpi|xz|Z|zip)$"
 export NNN_TRASH=2
 export NNN_BMS='f:~/Documents/Papa/Languages/French/French Niv 6/'
