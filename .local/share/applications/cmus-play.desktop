@@ -1,0 +1,13 @@
+[Desktop Entry]
+Encoding=UTF-8
+Version=1.0
+Type=Application
+#Display=true
+#Exec=bash -c \"pgrep -x cmus || ( xterm -e cmus & sleep 5 ) && cmus-remote -f %f\"
+Exec=cmus-play.fish %f
+Terminal=true
+Name=cmus-remote
+Comment=Music player cmus-remote control
+NoDisplay=true
+Icon=cmus
+MimeType=audio/flac;audio/mpegurl;audio/mpegurl;audio/mp4;audio/mp4;audio/ogg;audio/ogg;audio/x-scpls;audio/wav;audio/x-wav;
