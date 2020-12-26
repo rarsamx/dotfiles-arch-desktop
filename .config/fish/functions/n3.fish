@@ -28,7 +28,7 @@ function n3 -w 'nnn -e -A' -d 'nnn with support nnn quit and change directory'
     # stty lnext undef
 
     # If is not running under X and it is not inside tmux, use gvim
-    xhost >& /dev/nul
+    xhost &> /dev/null
     if test $status -eq 0 -a "$TERM" != "screen" -a -z "$TMUX" 
         env VISUAL=gvimd.fish nnn -e -A $argv
     else
