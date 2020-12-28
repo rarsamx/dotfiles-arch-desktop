@@ -39,4 +39,4 @@ alias snappost='
 echo "snapper -c root create -t post --pre-number"
 snapper -c config create -t post --pre-number'
 alias gitdotfiles='/usr/bin/git --git-dir=/home/papa/.gitdotfiles/ --work-tree=/home/papa'
-alias -s lc='ls -Ca'
+alias lc='ls -Ca'
