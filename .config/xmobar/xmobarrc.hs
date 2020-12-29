@@ -73,13 +73,13 @@ Config {
         , Run UnsafeStdinReader
  
         -- volume
-        , Run Com "/home/papa/bin/getpulseaudiovol.fish" [] "pulsevol" 10
+        , Run Com "/home/papa/bin/getpulseaudiovol" [] "pulsevol" 10
  
         -- input method
-        , Run Com "/home/papa/bin/getcurrentim.sh" [] "currim" 10
+        , Run Com "/home/papa/bin/getCurrentIM" [] "currim" 10
 
         -- CPU temp 
-        , Run Com "/home/papa/bin/cputemp.sh" [] "cputemp" 10
+        , Run Com "/home/papa/bin/getCPUTemp" [] "cputemp" 10
  
         -- network activity monitor (dynamic interface resolution)
         -- , Run DynNetwork     [ "--template" , "<dev>: D <tx>kB/s|U <rx>kB/s"
