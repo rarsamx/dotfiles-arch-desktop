@@ -51,7 +51,7 @@ import qualified Data.Map        as M
 myTerminal      = "xterm"
 
 -- The pfereffed editor program
-editor    = "gvimd.fish" -- Wrapper for gvim to start a single instance
+editor    = "gvimd" -- Wrapper for gvim to start a single instance
 
 -- Whether focus follows the mouse pointer.
 myFocusFollowsMouse :: Bool
@@ -121,9 +121,9 @@ tsSound a = TS.treeselectAction a
 tsPower :: TS.TSConfig (X ()) -> X()
 tsPower a = TS.treeselectAction a
    [ Node (TS.TSNode "Restart Xmonad"   "" (spawn "xmonad --recompile; xmonad --restart"))  []
-   , Node (TS.TSNode "Logout"           "" (spawn "graceful_shutdown.sh logout"))  []  
-   , Node (TS.TSNode "Reboot"           "" (spawn "graceful_shutdown.sh reboot"))  []
-   , Node (TS.TSNode "Shutdown"         "" (spawn "graceful_shutdown.sh shutdown"))  []           
+   , Node (TS.TSNode "Logout"           "" (spawn "gracefulShutdown logout"))  []  
+   , Node (TS.TSNode "Reboot"           "" (spawn "gracefulShutdown reboot"))  []
+   , Node (TS.TSNode "Shutdown"         "" (spawn "gracefulShutdown shutdown"))  []           
    ]
 
 tsDefaultConfig :: TS.TSConfig a
@@ -178,8 +178,9 @@ defXPConfig = def
       , historySize         = 256
       , historyFilter       = id
       , defaultText         = []
-      , autoComplete        = Just 100000  -- set Just 100000 for .1 sec
-      , showCompletionOnTab = True -- Only show list of completions when Tab was pressed
+      --, autoComplete        = Just 100000  -- set Just 100000 for .1 sec
+      , autoComplete        = Nothing  -- set Just 100000 for .1 sec
+      , showCompletionOnTab = False -- Only show list of completions when Tab was pressed
       -- , searchPredicate     = isPrefixOf
       , searchPredicate     = fuzzyMatch
       , defaultPrompter     = id -- $ map toUpper  -- change prompt to UPPER
@@ -198,7 +199,7 @@ sinkMute  = "pactl set-sink-mute   @DEFAULT_SINK@ toggle"
 micVolUp  = "pactl set-source-volume @DEFAULT_SOURCE@ +5%" 
 micVolDn  = "pactl set-source-volume @DEFAULT_SOURCE@ -5%"
 micMute   = "pactl set-source-mute   @DEFAULT_SOURCE@ toggle"
-closeWindows = "closeWindows.fish"
+closeWindows = "closeWindows"
 
 confirm :: String -> X () -> X ()
 confirm m f = do
@@ -245,12 +246,12 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     --                                                               \key_Left=scrollup;\
     --                                                               \key_Right=scrolldown;\
     --                                                               \key_Escape=ungrabkeys,exit;\
-    --                                                              xterm -e 'TERM=screen-256color-bce  \key_l=ungrabkeys,exec:graceful_shutdown.sh logout"
+    --                                                              xterm -e 'TERM=screen-256color-bce  \key_l=ungrabkeys,exec:gracefulShutdown logout"
     --                                                             ]
     --                                                  )  
-    --       "^ca(1, graceful_shutdown.sh shutdown)Shutdown^ca()^\n\
-    --       \^ca(1, graceful_shutdown.sh reboot  )Reboot^ca()\n\
-    --       \^ca(1, graceful_shutdown.sh logout  )Logout^ca()\n\
+    --       "^ca(1, gracefulShutdown shutdown)Shutdown^ca()^\n\
+    --       \^ca(1, gracefulShutdown reboot  )Reboot^ca()\n\
+    --       \^ca(1, gracefulShutdown logout  )Logout^ca()\n\
     --       \Cancel")
 
     -- Select the audio sink
