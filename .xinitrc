@@ -31,7 +31,7 @@ fcitx-autostart
 [[ -f ~/.config/nnn/nnnrc ]] && . ~/.config/nnn/nnnrc
 
 # Execute the background changer
-[[ -f ~/bin/xmonadBackgroundChanger.sh ]] && . ~/bin/xmonadBackgroundChanger.sh &
+[[ -f ~/bin/wmNitrogenBkgrndChanger ]] && . ~/bin/wmNitrogenBkgrndChanger &
 
 xsetroot -cursor_name left_ptr
 xsettingsd &
