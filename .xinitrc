@@ -1,10 +1,10 @@
 #!/bin/sh
 # [[ -f ~/.Xresources ]] && xrdb -merge -I$HOME ~/.Xresources
 
-userresources=$HOME/.Xresources
-usermodmap=$HOME/.Xmodmap
 sysresources=/etc/X11/xinit/.Xresources
 sysmodmap=/etc/X11/xinit/.Xmodmap
+userresources=$HOME/.Xresources
+usermodmap=$HOME/.Xmodmap
 
 # merge in defaults and keymaps
 
@@ -25,15 +25,35 @@ if [ -d /etc/X11/xinit/xinitrc.d ] ; then
  unset f
 fi
 
+# Environment variables required for having java agree with GTK themes
+export QT_QPA_PLATFORMTHEME=qt5ct
+export JAVA_FONTS=/usr/share/fonts/TTF
+export _JAVA_AWT_WM_NONREPARENTING=1
+export _JAVA_OPTIONS='-Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel'
+#export JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on'
+
+# Environment variables for fcitx
+export GTK_IM_MODULE=fcitx
+export tQT_IM_MODULE=fcitx
+export XMODIFIERS=@im=fcitx
+
 fcitx-autostart
 
 # Load configuration for the nnn file manager.
-[[ -f ~/.config/nnn/nnnrc ]] && . ~/.config/nnn/nnnrc
+# moved content to .pam_environment
+#[[ -f ~/.config/nnn/nnnrc ]] && . ~/.config/nnn/nnnrc
 
-# Execute the background changer
+# Execute the background image changer
 [[ -f ~/bin/wmNitrogenBkgrndChanger ]] && . ~/bin/wmNitrogenBkgrndChanger &
 
+# WIthout this line we may not have a cursor when starting monad
 xsetroot -cursor_name left_ptr
+
+# xsettingsd is used to provide xsettings specifications to java applications
 xsettingsd &
+
+# Light compositor. I use it so xmonad treeselect can have transparency
 xcompmgr -cCn &
+
+# Tiling window manager
 exec xmonad
