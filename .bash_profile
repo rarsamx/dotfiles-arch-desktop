@@ -1,6 +1,7 @@
 #
 # ~/.bash_profile
 #
+# Executed when a login shell starts
 
 [[ -f ~/.bashrc ]] && . ~/.bashrc
 
