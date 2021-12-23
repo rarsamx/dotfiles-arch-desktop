@@ -10,4 +10,4 @@ Name=cmus-play
 Comment=Music player cmus-remote control
 NoDisplay=true
 Icon=cmus
-MimeType=audio/flac;audio/mpegurl;audio/mpegurl;audio/mp4;audio/mp4;audio/ogg;audio/ogg;audio/x-scpls;audio/wav;audio/x-wav;
+MimeType=audio/flac;audio/mpegurl;audio/mpegurl;audio/mp4;audio/mp3;audio/ogg;audio/ogg;audio/x-scpls;audio/wav;audio/x-wav;
