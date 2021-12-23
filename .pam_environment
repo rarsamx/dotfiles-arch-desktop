@@ -13,7 +13,7 @@
 #_JAVA_OPTIONS   DEFAULT='-Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel'
 
 # Enable colours and exit if text less than one page
-LESS        DEFAULT="-RFi --mouse --wheel-lines=3"
+LESS        DEFAULT="-Ri --mouse --wheel-lines=3"
 EDITOR      DEFAULT=vimd
 VISUAL      DEFAULT=gvimd
 PAGER       DEFAULT=less
@@ -22,6 +22,6 @@ PAGER       DEFAULT=less
 NNN_PLUG    DEFAULT="d:dragdrop;f:diffs;i:imgview;m:nmount-udisk;t:treeview;p:preview-tui"
 NNN_ARCHIVE DEFAULT="\\.(7z|a|ace|alz|arc|arj|bz|bz2|cab|cpio|deb|gz|jar|lha|lz|lzh|lzma|lzo|rar|rpm|rz|t7z|tar|tbz|tbz2|tgz|tlz|txz|tZ|tzo|war|xpi|xz|Z|zip)$"
 NNN_TRASH   DEFAULT=2
-NNN_BMS     DEFAULT="f:~/Documents/Papa/Languages/French/French Niv 6/"
+NNN_BMS     DEFAULT="s:~/Documents/Papa/Statements;f:~/Documents/Papa/Languages/French/French Niv 8"
 NNN_FIFO    DEFAULT="/tmp/nnn.fifo"
 NNN_COLORS  DEFAULT="2356"
