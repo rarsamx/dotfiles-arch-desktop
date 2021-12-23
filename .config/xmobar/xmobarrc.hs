@@ -2,9 +2,9 @@ Config {
 
    -- appearance
 --     font = "xft:Noto Sans:size=12:antialias:=true"
-     font = "xft:FontAwesome Regular:size=11:antialias:=true"
+     font = "xft:FontAwesome Regular:size=12:antialias:=true"
    , additionalFonts = [ 
-            "xft:FontAwesome Regular:size=11:antialias:=true"
+            "xft:FontAwesome Regular:size=12:antialias:=true"
         ,   "xft:Noto Sans:size=12:bold:antialias:=true"
         ,   "xft:Monospace:size=14:bold:antialias=true"
         ,   "xft:Source Code Pro:size=10:regular:antialias=true"
@@ -12,11 +12,15 @@ Config {
         ]
 
    , bgColor =      "black"
+   , alpha = 100
 --   , fgColor =      "#646464"
-   , fgColor =      "#ABABAB"
+--   , fgColor =      "#ABABAB"
+   , fgColor =      "#DEDEDE"
    , position =     Top
-   , border =       BottomB
-   , borderColor =  "#646464"
+--   , border =       BottomB
+--   , borderColor =  "#333333"
+   -- , borderColor =  "#646464"
+--   , borderWidth =  2  
 
    -- layout
    , sepChar =  "%"   -- delineator between plugin names and straight text
@@ -24,6 +28,7 @@ Config {
 --   , template = "%battery% | %multicpu% | %coretemp% | %memory% | %dynnetwork% }{ %RJTT% | %date% || %kbd% "
 
    , template = "%UnsafeStdinReader% }{\
+                \Upd: <fc=lightblue><fn=1>%archupdates%</fn></fc> | \
                 \<action=`xterm -e htop`>\
                     \%cpu% \
                     \<fc=lightblue><fn=1>%cputemp%</fn></fc>°C | \
@@ -62,7 +67,7 @@ Config {
 
         -- weather monitor
         [ Run Weather "CYUL" [ "--template"
-                    ,   "<action=`firefox --kiosk --new-window https://montréal.weatherstats.ca/`>\
+                    ,   "<action=`firefox https://montréal.weatherstats.ca/`>\
                             \<skyCondition> \
                             \<fc=lightblue><fn=1><tempC></fn></fc>°C \
                             \<fc=lightblue><fn=1><rh></fn></fc>%\
@@ -81,7 +86,10 @@ Config {
         -- CPU temp 
         , Run Com "/home/papa/bin/getCPUTemp" [] "cputemp" 10
  
-        -- network activity monitor (dynamic interface resolution)
+        -- CPU temp 
+        , Run Com "/home/papa/bin/getNumberOfArchUpdates" [] "archupdates" 36000
+
+-- network activity monitor (dynamic interface resolution)
         -- , Run DynNetwork     [ "--template" , "<dev>: D <tx>kB/s|U <rx>kB/s"
         --                      , "--Low"      , "1000"       -- units: B/s
         --                      , "--High"     , "5000"       -- units: B/s
@@ -119,7 +127,9 @@ Config {
 
         -- time and date indicator 
         --   (%F = y-m-d date, %a = day of week, %T = h:m:s time)
-        , Run Date           "<fc=#ABABAB>%a %b %d</fc> <fc=lightblue><fn=1>%R</fn></fc>" "date" 600
+        , Run Date           "<action=`firefox https://calendar.google.com/`>\
+                                \<fc=#DEDEDE>%a %b %d</fc> <fc=lightblue><fn=1>%R</fn></fc> \
+                             \</action>" "date" 600
 
 --        , Run MultiCpu       [ "--template" , "Cpu: <total0>%|<total1>%"
 --                             , "--Low"      , "70"         -- units: %
