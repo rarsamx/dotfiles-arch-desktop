@@ -10,7 +10,7 @@ import XMonad.Hooks.ManageDocks
 import XMonad.Layout.NoBorders
 import XMonad.Layout.Tabbed
 import XMonad.Util.Dmenu
---import XMonad.Util.Dzen
+import XMonad.Util.Dzen as DZ
 import XMonad.Util.Paste
 import XMonad.Util.Run
 import XMonad.Util.SpawnOnce
@@ -38,9 +38,16 @@ import Control.Monad
 import Data.Tree
 import qualified XMonad.Actions.TreeSelect as TS
 
-import XMonad.Prompt
+import XMonad.Prompt as P
+-- import XMonad.Prompt.AppLauncher as AL
 import XMonad.Prompt.Shell
 import XMonad.Prompt.FuzzyMatch
+
+import XMonad.Actions.DynamicWorkspaces as DW
+import XMonad.Actions.CopyWindow(copy)
+import XMonad.Actions.CycleWS as CWS
+import XMonad.Actions.WorkspaceNames as WN
+-- import XMonad.Actions.UpdatePointer as UP
 
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
@@ -58,6 +65,7 @@ myFocusFollowsMouse :: Bool
 myFocusFollowsMouse = False
 
 -- Whether clicking on a window to focus also passes the click to the window
+-- Setting it to false makes the xmonad Prompt and treeselect to freeze
 myClickJustFocuses :: Bool
 myClickJustFocuses = False
 
@@ -73,7 +81,7 @@ myBorderWidth   = 1
 myModMask       = mod4Mask
 
 -- Default font for most things
-myFont = "xft:Ubuntu:size=10:antialias:=true"
+myFont = "xft:Ubuntu:size=11:antialias:=true"
 
 -- The default number of workspaces (virtual screens) and their names.
 -- By default we use numeric strings, but any string may be used as a
@@ -85,14 +93,27 @@ myFont = "xft:Ubuntu:size=10:antialias:=true"
 -- > workspaces = ["web", "irc", "code" ] ++ map show [4..9]
 --
 --
-myWorkspaces :: [String]        
+--myWorkspaces :: [String]        
 --myWorkspaces    = ["1","2","3","4","5","6","7","8","9"]
-myWorkspaces = clickable . (map xmobarEscape) $ ["1","2","3","4","5","6","7","8","9"]
+-- myWorkspaces = clickable . (map xmobarEscape) $ ["FreeMind","BBB","xzoom","Demos","Browser","6","7","8","9"]
                                                                               
-  where                                                                       
-         clickable l = [ "<action=xdotool key Super_L+" ++ show (n) ++ ">" ++ ws ++ "</action>" |
-                             (i,ws) <- zip [1..9] l,                                        
-                            let n = i ]
+--   where                                                                       
+--          clickable l = [ "<action=xdotool key Super_L+" ++ show (n) ++ ">" ++ ws ++ "</action>" |
+--                              (i,ws) <- zip [1..9] l,                                        
+--                             let n = i ]
+
+myWorkspaces :: Forest String        
+myWorkspaces = [ Node "1" []
+               , Node "2" []
+               , Node "3" []
+               , Node "4" []
+               , Node "5" []
+               , Node "6" []
+               , Node "7" []
+               , Node "8" []
+               , Node "9" []
+               ]
+                                                                              
 -- Border colors for unfocused and focused windows, respectively.
 --
 myNormalBorderColor  = "#dddddd"
@@ -103,15 +124,23 @@ myFocusedBorderColor = "#0000ff"
 -- Tree select for sound sinks and sources 
 tsSound :: TS.TSConfig (X ()) -> X()
 tsSound a = TS.treeselectAction a
-   [ Node (TS.TSNode "Default Speakers" "" (return ()))
+   [ Node (TS.TSNode "Volume Control" ""  
+                            (spawn "pavucontrol")) [] 
+   , Node (TS.TSNode "> Default Speakers" "" (return ()))
        [ Node (TS.TSNode    "Built-in Audio Analog Stereo" ""  
                             (spawn "pacmd \"set-default-sink alsa_output.pci-0000_00_14.2.analog-stereo\"")) []
        , Node (TS.TSNode    "Plantronics Blackwire 520 Analog Stereo" "" 
-                            (spawn "pacmd \"set-default-sink alsa_output.usb-Plantronics_Plantronics_Blackwire_520-00.iec958-stereo\""))  []
+                            (spawn "pacmd \"set-default-sink alsa_output.usb-Plantronics_Plantronics_Blackwire_5220_Series_54A8348DFAB44ED5BB6A2F7EED3724BA-00.analog-stereo\""))  []
        ]
-   , Node (TS.TSNode "Default Microphone" "" (return ()))
-       [ Node (TS.TSNode    "Plantronics Blackwire 520 Digital Stereo" "" 
-                            (spawn "pacmd \"set-default-source alsa_input.usb-Plantronics_Plantronics_Blackwire_520-00.iec958-stereo\"")) []
+--   , Node (TS.TSNode "> Default Microphone" "" (return ()))
+--       [ Node (TS.TSNode    "Plantronics Blackwire 520 Digital Stereo" "" 
+--                            (spawn "pacmd \"set-default-source alsa_input.usb-Plantronics_Plantronics_Blackwire_520-00.iec958-stereo\"")) []
+--       , Node (TS.TSNode    "LifeCam NX-6000 Multichannel" ""             
+--                            (spawn "pacmd \"set-default-source alsa_input.usb-Microsoft_Microsoft___LifeCam_NX-6000-02.multichannel-input\""))  []
+--       ]
+    , Node (TS.TSNode "> Default Microphone" "" (return ()))
+       [ Node (TS.TSNode    "Plantronics Blackwire 5220 Digital Stereo" "" 
+                            (spawn "pacmd \"set-default-source alsa_input.usb-Plantronics_Plantronics_Blackwire_5220_Series_54A8348DFAB44ED5BB6A2F7EED3724BA-00.mono-fallback\"")) []
        , Node (TS.TSNode    "LifeCam NX-6000 Multichannel" ""             
                             (spawn "pacmd \"set-default-source alsa_input.usb-Microsoft_Microsoft___LifeCam_NX-6000-02.multichannel-input\""))  []
        ]
@@ -134,11 +163,11 @@ tsDefaultConfig =  TS.TSConfig { TS.ts_hidechildren = False
                               , TS.ts_nodealt      = (0xff000000, 0xff666666) --  (#000000, #666666)
                               , TS.ts_highlight    = (0xff000000, 0xff999999) --  (#000000, #999999)
                               , TS.ts_extra        = 0xffffffff               --   #000000
-                              , TS.ts_node_width   = 300
+                              , TS.ts_node_width   = 400
                               , TS.ts_node_height  = 25
                               , TS.ts_originX      = 500
                               , TS.ts_originY      = 500
-                              , TS.ts_indent       = 40
+                              , TS.ts_indent       = 30
                               , TS.ts_navigate     = tsTreeNavigation
                            }
 
@@ -163,32 +192,46 @@ tsTreeNavigation = M.fromList
 -- Prompts configuration
 defXPConfig :: XPConfig
 defXPConfig = def
-      { font                = myFont
-      , bgColor             = "#282c34"
-      , fgColor             = "#bbc2cf"
-      , bgHLight            = "#c792ea"
-      , fgHLight            = "#000000"
-      , borderColor         = "#535974"
-      , promptBorderWidth   = 0
+      { P.font                = myFont
+      , P.bgColor             = "#282c34"
+      , P.fgColor             = "#bbc2cf"
+      , P.bgHLight            = "#c792ea"
+      , P.fgHLight            = "#000000"
+      , P.borderColor         = "#535974"
+      , P.promptBorderWidth   = 0
 --      , promptKeymap        = dtXPKeymap
-      , promptKeymap        = vimLikeXPKeymap
-      , position            = Top
+      , P.promptKeymap        = vimLikeXPKeymap
+      , P.position            = Top
       -- , position            = CenteredAt { xpCenterY = 0.3, xpWidth = 0.3 }
-      , height              = 23
-      , historySize         = 256
-      , historyFilter       = id
-      , defaultText         = []
+      , P.height              = 23
+      , P.historySize         = 256
+      , P.historyFilter       = id
+      , P.defaultText         = []
       --, autoComplete        = Just 100000  -- set Just 100000 for .1 sec
-      , autoComplete        = Nothing  -- set Just 100000 for .1 sec
-      , showCompletionOnTab = False -- Only show list of completions when Tab was pressed
+      , P.autoComplete        = Nothing  -- set Just 100000 for .1 sec
+      , P.showCompletionOnTab = False -- Only show list of completions when Tab was pressed
       -- , searchPredicate     = isPrefixOf
-      , searchPredicate     = fuzzyMatch
-      , defaultPrompter     = id -- $ map toUpper  -- change prompt to UPPER
+      , P.searchPredicate     = fuzzyMatch
+      , P.defaultPrompter     = id -- $ map toUpper  -- change prompt to UPPER
       -- , defaultPrompter     = unwords . map reverse . words  -- reverse the prompt
       -- , defaultPrompter     = drop 5 .id (++ "XXXX: ")  -- drop first 5 chars of prompt and add XXXX:
-      , alwaysHighlight     = True
-      , maxComplRows        = Just 1 -- Nothing      -- set to 'Just 5' for 5 rows
+      , P.alwaysHighlight     = True
+      , P.maxComplRows        = Just 1 -- Nothing      -- set to 'Just 5' for 5 rows
       }
+
+wsXPConfig :: XPConfig
+wsXPConfig = def { P.position = Top
+                , P.historySize = 50
+                , P.font = myFont 
+                , P.bgColor             = "#282c34"
+                , P.fgColor             = "#bbc2cf"
+                , P.bgHLight            = "#c792ea"
+                , P.fgHLight            = "#000000"
+                , P.borderColor         = "#535974"
+                , P.promptBorderWidth   = 0
+                , P.promptKeymap = vimLikeXPKeymap
+                , P.historyFilter = deleteAllDuplicates
+                 } 
 
 ------------------------------------------------------------------------
 -- External commands used by Keybindings
@@ -216,28 +259,32 @@ confirm m f = do
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
     [ 
-      ((modm,               xK_p        ), spawn "dmenu_run")            -- launch dmenu
-    , ((0 ,                 xK_Menu     ), shellPrompt defXPConfig )     -- launch shell prompt
-    , ((modm .|. shiftMask, xK_Return   ), spawn $ XMonad.terminal conf) -- launch a terminal
-    , ((modm,               xK_v        ), spawn editor     )            -- launch editor
-    
+      ((modm,                xK_p        ), spawn "dmenu_run")            -- launch dmenu
+    , ((0 ,                  xK_Menu     ), shellPrompt defXPConfig )     -- launch shell prompt
+    , ((modm .|. shiftMask,  xK_Return   ), spawn $ XMonad.terminal conf) -- launch a terminal
+    , ((modm,                xK_v        ), spawn editor     )            -- launch editor
 
-    -- launch gmrun (not installed)
-    --  , ((modm .|. shiftMask, xK_p     ), spawn "gmrun")
+    , ((modm,               xK_a        ), DW.selectWorkspace wsXPConfig)
+    , ((modm .|. shiftMask, xK_a        ), DW.addWorkspacePrompt wsXPConfig )
+    , ((modm,               xK_d        ), DW.renameWorkspace wsXPConfig) 
+    , ((modm,               xK_d        ), WN.renameWorkspace wsXPConfig) 
+    , ((modm .|. shiftMask, xK_d        ), DW.removeEmptyWorkspace)
+    
+    --  , ((modm .|. shiftMask, xK_p     ), spawn "gmrun")              -- launch gmrun (not installed)
 
     -- **** Start Raul Modifications
 
     ------------------------------     
     -- Alternative ways to show menus
     -- Turn off/ Reboot / Suspend
-    -- , ((controlMask .|. mod1Mask , xK_q     ), spawn "xmobar  /home/papa/.config/xmobar/xmobarpoweroffrc.hs")
-    -- , ((controlMask .|. mod1Mask , xK_q     ), dzenConfig (timeout 20 >=> 
-    --                                                  onCurr(center 400 100) >=> 
-    --                                                  fgColor    "darkGreen" >=> 
-    --                                                  bgColor    "darkGray" >=>
-    --                                                  slaveAlign AlignCenter >=>
-    --                                                  lineCount  4 >=>
-    --                                                  addArgs    [ "-m", "h"
+    -- , ((modm, xK_q     ), spawn "xmobar  /home/papa/.config/xmobar/xmobarpoweroffrc.hs")
+    -- , ((modm , xK_q     ), dzenConfig (timeout 20 >=> 
+    --                                                  DZ.onCurr(center 400 100) >=> 
+    --                                                  DZ.fgColor    "darkGreen" >=> 
+    --                                                  DZ.bgColor    "darkGray" >=>
+    --                                                  DZ.slaveAlign AlignCenter >=>
+    --                                                  DZ.lineCount  4 >=>
+    --                                                  DZ.addArgs    [ "-m", "h"
 -- --                                                                , "-l", "4"
 -- --                                                                , "-sa", "c"
     --                                                             , "-e"
@@ -246,7 +293,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     --                                                               \key_Left=scrollup;\
     --                                                               \key_Right=scrolldown;\
     --                                                               \key_Escape=ungrabkeys,exit;\
-    --                                                              xterm -e 'TERM=screen-256color-bce  \key_l=ungrabkeys,exec:gracefulShutdown logout"
+    --                                                               \key_l=ungrabkeys,exec:gracefulShutdown logout"
     --                                                             ]
     --                                                  )  
     --       "^ca(1, gracefulShutdown shutdown)Shutdown^ca()^\n\
@@ -311,6 +358,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     
     -------------------------
     -- Treeselect Menues
+    -- , ((modm,               xK_d    ), TS.treeselectWorkspace tsDefaultConfig myWorkspaces W.greedyView) -- Menu to select defautl speakers and microphone
     , ((modm,               xK_s    ), tsSound tsDefaultConfig ) -- Menu to select defautl speakers and microphone
     , ((modm,               xK_q    ), tsPower tsDefaultConfig ) -- Menu for Shutodwn options
 
@@ -485,15 +533,16 @@ myLayout = avoidStruts ( tiled ||| Mirror tiled ||| noBorders (tabbed shrinkText
 --
 myManageHook = composeAll
     [ className =? "MPlayer"        --> doFloat
-    , className =? "Gimp"           --> doFloat
+--    , className =? "Gimp"           --> doFloat
     , className =? "Pavucontrol"    --> doFloat
     , className =? "Zoiper"         --> doFloat
     , resource  =? "desktop_window" --> doIgnore
     , resource  =? "kdesktop"       --> doIgnore ]
 
-xmobarEscape = concatMap doubleLts
-  where doubleLts '<' = "<<"
-        doubleLts x   = [x]
+-- xmobarEscape = concatMap doubleLts
+--   where doubleLts '<' = "<<"
+--         doubleLts x   = [x]
+
 ------------------------------------------------------------------------
 -- Event handling
 
@@ -529,6 +578,9 @@ myStartupHook = return ()
 ------------------------------------------------------------------------
 -- Now run xmonad with all the defaults we set up.
 
+clickable l = [ "<action=xdotool key Super_L+" ++ show (n) ++ ">" ++ ws ++ "</action>" |
+                (i,ws) <- zip [1..9] l,                                        
+                             let n = i ]
 -- Run xmonad with the settings you specify. No need to modify this.
 --
 --main = xmonad defaults
@@ -536,11 +588,13 @@ myStartupHook = return ()
 --         xmproc <- spawnPipe "xmobar -x 1 /home/papa/.config/xmobar/xmobarrc"
 --         xmonad $ docks defaults
 main = do
-    xmproc <- spawnPipe "xmobar -x 1 /home/papa/.config/xmobar/xmobarrc.hs"
+    xmproc <- spawnPipe "xmobar -x 0 /home/papa/.config/xmobar/xmobarrc.hs"
     xmonad $ docks $ ewmh defaults
         { manageHook = manageDocks <+> myManageHook 
         -- , layoutHook = avoidStruts  $  layoutHook desktopConfig
-        , workspaces = myWorkspaces
+--        , workspaces = myWorkspaces
+        , workspaces = TS.toWorkspaces myWorkspaces
+--        , workspaces = clickable . (map xmobarEscape) $ TS.toWorkspaces myWorkspaces
         , logHook = dynamicLogWithPP xmobarPP
                         { ppOutput  = hPutStrLn xmproc
                         , ppSep     = " | "
@@ -551,7 +605,8 @@ main = do
                         , ppTitle   = xmobarColor "lightblue"  "" . shorten 40
                         , ppVisible = xmobarColor "yellow" "" . wrap "<fn=1> " " </fn>"
                         , ppUrgent  = xmobarColor "red" "yellow"
-                        }
+                        } 
+                        -- >> UP.updatePointer (0.25, 0.25) (0.25, 0.25)
         } 
 -- A structure containing your configuration settings, overriding
 -- fields in the default config. Any you don't override, will
