@@ -31,6 +31,7 @@ export JAVA_FONTS=/usr/share/fonts/TTF
 export _JAVA_AWT_WM_NONREPARENTING=1
 export _JAVA_OPTIONS='-Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel'
 #export JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on'
+export FREEPLANE_USE_UNSUPPORTED_JAVA_VERSION=1
 
 # Environment variables for fcitx
 export GTK_IM_MODULE=fcitx
@@ -54,6 +55,9 @@ xsettingsd &
 
 # Light compositor. I use it so xmonad treeselect can have transparency
 xcompmgr -cCn &
+
+# Sets the colour temperature of the screen according to time
+redshift &
 
 # Tiling window manager
 exec xmonad
