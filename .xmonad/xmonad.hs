@@ -9,6 +9,8 @@ import XMonad.Actions.WindowBringer
 import XMonad.Hooks.ManageDocks
 import XMonad.Layout.NoBorders
 import XMonad.Layout.Tabbed
+import XMonad.Layout.Renamed
+import XMonad.Layout.Spacing
 import XMonad.Util.Dmenu
 import XMonad.Util.Dzen as DZ
 import XMonad.Util.Paste
@@ -56,6 +58,7 @@ import qualified Data.Map        as M
 -- certain contrib modules.
 --
 myTerminal      = "xterm"
+--myTerminal      = "xterm -e tmux"
 
 -- The pfereffed editor program
 editor    = "gvimd" -- Wrapper for gvim to start a single instance
@@ -118,7 +121,8 @@ myWorkspaces = [ Node "1" []
 --
 myNormalBorderColor  = "#dddddd"
 --myFocusedBorderColor = "#ff0000"
-myFocusedBorderColor = "#0000ff"
+--myFocusedBorderColor = "#0000ff"
+myFocusedBorderColor = "#000000"
 
 ------------------------------------------------------------
 -- Tree select for sound sinks and sources 
@@ -131,7 +135,9 @@ tsSound a = TS.treeselectAction a
                             (spawn "pacmd \"set-default-sink alsa_output.pci-0000_00_14.2.analog-stereo\"")) []
        , Node (TS.TSNode    "Plantronics Blackwire 520 Analog Stereo" "" 
                             (spawn "pacmd \"set-default-sink alsa_output.usb-Plantronics_Plantronics_Blackwire_5220_Series_54A8348DFAB44ED5BB6A2F7EED3724BA-00.analog-stereo\""))  []
-       ]
+       , Node (TS.TSNode    "Logitech H570e Stereo" "" 
+                            (spawn "pacmd \"set-default-sink alsa_output.usb-Logitech_Inc_Logitech_H570e_Stereo_00000000-00.analog-stereo\""))  []
+        ]
 --   , Node (TS.TSNode "> Default Microphone" "" (return ()))
 --       [ Node (TS.TSNode    "Plantronics Blackwire 520 Digital Stereo" "" 
 --                            (spawn "pacmd \"set-default-source alsa_input.usb-Plantronics_Plantronics_Blackwire_520-00.iec958-stereo\"")) []
@@ -261,7 +267,8 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     [ 
       ((modm,                xK_p        ), spawn "dmenu_run")            -- launch dmenu
     , ((0 ,                  xK_Menu     ), shellPrompt defXPConfig )     -- launch shell prompt
-    , ((modm .|. shiftMask,  xK_Return   ), spawn $ XMonad.terminal conf) -- launch a terminal
+--    , ((modm .|. shiftMask,  xK_Return   ), spawn $ XMonad.terminal conf) -- launch a terminal
+    , ((modm .|. shiftMask,  xK_Return   ), runInTerm "" "tmux")   -- Open Terminal with tmux
     , ((modm,                xK_v        ), spawn editor     )            -- launch editor
 
     , ((modm,               xK_a        ), DW.selectWorkspace wsXPConfig)
@@ -428,6 +435,8 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- Use this binding with avoidStruts from Hooks.ManageDocks.
     -- See also the statusBar function from Hooks.DynamicLog.
     , ((modm              , xK_b     ), sendMessage ToggleStruts)
+    , ((modm              , xK_equal ), incWindowSpacing 2)
+    , ((modm              , xK_minus ), decWindowSpacing 2)
 
     -- Run xmessage with a summary of the default keybindings (useful for beginners)
     , ((modm .|. shiftMask, xK_slash ), spawn ("echo \"" ++ help ++ "\" | xmessage -file -"))
@@ -490,31 +499,43 @@ myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
 -- The available layouts.  Note that each layout is separated by |||,
 -- which denotes layout choice.
 --
-myTabConfig = def { activeColor = "#556064"
-                  , inactiveColor = "#2F3D44"
-                  , urgentColor = "#FDF6E3"
-                  , activeBorderColor = "#454948"
-                  , inactiveBorderColor = "#454948"
-                  , urgentBorderColor = "#268BD2"
-                  , activeTextColor = "#80FFF9"
-                  , inactiveTextColor = "#1ABC9C"
-                  , urgentTextColor = "#1ABC9C"
-                  , fontName = myFont
-                  }
-
-myLayout = avoidStruts ( tiled ||| Mirror tiled ||| noBorders (tabbed shrinkText myTabConfig) ||| noBorders Full)
+myLayout 
+--  = avoidStruts ( tiled ||| wide ||| tabs ||| noBorders Full)
+  = avoidStruts ( tall ||| wide ||| tabs ||| full )
   where
-     -- default tiling algorithm partitions the screen into two panes
-     tiled   = Tall nmaster delta ratio
+    myWindowGap = 0 :: Integer
+    -- default tiling algorithm partitions the screen into two panes
+    tall    
+      = renamed [Replace "Tall"] $ 
+          mySpacing myWindowGap $
+          Tall nmaster delta ratio
+      where
+        nmaster = 1      -- The default number of windows in the master pane
+        ratio   = 1/2    -- Default proportion of screen occupied by master pane
+        delta   = 3/100  -- Percent of screen to increment by when resizing panes
 
-     -- The default number of windows in the master pane
-     nmaster = 1
+    wide
+      = renamed [Replace "Wide"] $ Mirror tall
+    tabs
+--      = renamed [Replace "Tabbed"] $ noBorders (tabbed shrinkText myTabConfig)
+      = renamed [Replace "Tabbed"] $ tabbed shrinkText myTabConfig
+      where
+        myTabConfig = def { activeColor = "#556064"
+                 , inactiveColor = "#2F3D44"
+                 , urgentColor = "#FDF6E3"
+                 , activeBorderColor = "#454948"
+                 , inactiveBorderColor = "#454948"
+                 , urgentBorderColor = "#268BD2"
+                 , activeTextColor = "#80FFF9"
+                 , inactiveTextColor = "#1ABC9C"
+                 , urgentTextColor = "#1ABC9C"
+                 , fontName = myFont
+                 }
+    full
+      = renamed [Replace "Full"] $ Full
 
-     -- Default proportion of screen occupied by master pane
-     ratio   = 1/2
+    mySpacing gap = spacingRaw False (Border 0 gap 0 gap) True (Border gap 0 gap 0) True
 
-     -- Percent of screen to increment by when resizing panes
-     delta   = 3/100
 
 -----------------------------4-------------------------------------------
 -- Window rules:
