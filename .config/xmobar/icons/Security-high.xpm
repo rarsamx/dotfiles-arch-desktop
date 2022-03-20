@@ -1,0 +1,26 @@
+/* XPM */
+static char *security_high[] = {
+/* columns rows colors chars-per-pixel */
+"16 16 4 1 ",
+"  c None",
+". c gray74",
+"X c gray",
+"o c gray75",
+/* pixels */
+"       XX       ",
+"     XXXXXX     ",
+"   XXXXXXXXXXX  ",
+"XXXXXX     XXXXX",
+"XXX   XXXX   XXX",
+"XX  XXXXXXXX  XX",
+" XX XXXXXXXX XX ",
+" XX XXXXXXXX XX ",
+" XX XXXXXXXX XX ",
+"  XX XXXXXX XX  ",
+"  XX  XXXX  XX  ",
+"   XX  XX  XX   ",
+"    XX    XX    ",
+"    XXXXXXX     ",
+"      XXXX      ",
+"       XX       "
+};

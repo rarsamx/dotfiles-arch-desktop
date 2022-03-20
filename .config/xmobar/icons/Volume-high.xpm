@@ -1,0 +1,26 @@
+/* XPM */
+static char *Volume_high[] = {
+/* columns rows colors chars-per-pixel */
+"16 16 4 1 ",
+"  c None",
+". c gray74",
+"X c gray",
+"o c gray75",
+/* pixels */
+"                ",
+"           XX   ",
+"     X     XX   ",
+"    XX   X  XX  ",
+"   XXX   XX XX  ",
+"XXXXXX X XXX XX ",
+"XXXXXX XX XX XX ",
+"XXXXXX XX XX XX ",
+"XXXXXX XX XX XX ",
+"XXXXXX XX XX XX ",
+"XXXXXX X XXX XX ",
+"   XXX   XX XX  ",
+"    XX   X  XX  ",
+"     X     XX   ",
+"           XX   ",
+"                "
+};

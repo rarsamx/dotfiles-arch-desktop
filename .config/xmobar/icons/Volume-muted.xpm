@@ -1,0 +1,25 @@
+/* XPM */
+static char *Volume_muted[] = {
+/* columns rows colors chars-per-pixel */
+"16 16 3 1 ",
+"  c None",
+". c gray74",
+"X c gray",
+/* pixels */
+"                ",
+"                ",
+"     X          ",
+"    XX          ",
+"   XXX          ",
+"XXXXXX          ",
+"XXXXXX          ",
+"XXXXXX          ",
+"XXXXXX          ",
+"XXXXXX          ",
+"XXXXXX          ",
+"   XXX     XX XX",
+"    XX     XXXXX",
+"     X      XXX ",
+"           XXXXX",
+"           XX XX"
+};

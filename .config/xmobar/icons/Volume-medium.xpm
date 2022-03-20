@@ -1,0 +1,26 @@
+/* XPM */
+static char *Volume_medium[] = {
+/* columns rows colors chars-per-pixel */
+"16 16 4 1 ",
+"  c None",
+". c gray74",
+"X c gray",
+"o c gray75",
+/* pixels */
+"                ",
+"                ",
+"     X          ",
+"    XX   X      ",
+"   XXX   XX     ",
+"XXXXXX X XXX    ",
+"XXXXXX XX XX    ",
+"XXXXXX XX XX    ",
+"XXXXXX XX XX    ",
+"XXXXXX XX XX    ",
+"XXXXXX X XXX    ",
+"   XXX   XX     ",
+"    XX   X      ",
+"     X          ",
+"                ",
+"                "
+};
