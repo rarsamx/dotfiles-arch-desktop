@@ -35,7 +35,7 @@ export FREEPLANE_USE_UNSUPPORTED_JAVA_VERSION=1
 
 # Environment variables for fcitx
 export GTK_IM_MODULE=fcitx
-export tQT_IM_MODULE=fcitx
+export QT_IM_MODULE=fcitx
 export XMODIFIERS=@im=fcitx
 
 fcitx-autostart
