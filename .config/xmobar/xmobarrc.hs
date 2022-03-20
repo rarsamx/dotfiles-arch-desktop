@@ -28,7 +28,7 @@ Config {
 --   , template = "%battery% | %multicpu% | %coretemp% | %memory% | %dynnetwork% }{ %RJTT% | %date% || %kbd% "
 
    , template = "%UnsafeStdinReader% }{\
-                \RdSh: <fc=lightblue><fn=1>%redshiftperiod%</fn></fc> | \
+                \RdSh: <fc=lightblue><fn=1>%redshiftparams%</fn></fc> | \
                 \Upd: <fc=lightblue><fn=1>%archupdates%</fn></fc> | \
                 \<action=`xterm -e htop`>\
                     \%cpu% \
@@ -88,7 +88,7 @@ Config {
         , Run Com "/home/papa/bin/getCPUTemp" [] "cputemp" 10
  
         --Redshift Period 
-        , Run Com "/home/papa/bin/getRedshiftPeriod" [] "redshiftperiod" 600
+        , Run Com "/home/papa/bin/getRedshiftParams" [] "redshiftparams" 600
  
         -- CPU temp 
         , Run Com "/home/papa/bin/getNumberOfArchUpdates" [] "archupdates" 36000
