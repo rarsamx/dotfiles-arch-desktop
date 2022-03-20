@@ -2,6 +2,7 @@
 -- https://wiki.haskell.org/Xmonad/Config_archive
 
 import Data.Monoid
+import Data.List  -- for `isSuffixOf`
 import Graphics.X11.ExtraTypes.XF86
 import System.Exit
 import XMonad
@@ -242,12 +243,12 @@ wsXPConfig = def { P.position = Top
 ------------------------------------------------------------------------
 -- External commands used by Keybindings
 --
-sinkVolUp = "pactl set-sink-volume @DEFAULT_SINK@ +5%" 
-sinkVolDn = "pactl set-sink-volume @DEFAULT_SINK@ -5%"
-sinkMute  = "pactl set-sink-mute   @DEFAULT_SINK@ toggle"
-micVolUp  = "pactl set-source-volume @DEFAULT_SOURCE@ +5%" 
-micVolDn  = "pactl set-source-volume @DEFAULT_SOURCE@ -5%"
-micMute   = "pactl set-source-mute   @DEFAULT_SOURCE@ toggle"
+sinkVolUp = "xmbSetPulseVol +5%" 
+sinkVolDn = "xmbSetPulseVol -5%"
+sinkMute  = "xmbSetPulseVol toggle"
+micVolUp  = "xmbSetPulseMicVol +5%" 
+micVolDn  = "xmbSetPulseMicVol -5%"
+micMute   = "xmbSetPulseMicVol toggle"
 closeWindows = "closeWindows"
 
 confirm :: String -> X () -> X ()
@@ -549,17 +550,22 @@ myLayout
 -- > xprop | grep WM_CLASS
 -- and click on the client you're interested in.
 --
+
 -- To match on the WM_NAME, you can use 'title' in the same way that
 -- 'className' and 'resource' are used below.
 --
 myManageHook = composeAll
     [ className =? "MPlayer"        --> doFloat
---    , className =? "Gimp"           --> doFloat
+    , (fmap ("gimp-image-window" `isPrefixOf`) role) --> (ask >>=doF . W.sink)
+    , className =? "Gimp"           --> doFloat
     , className =? "Pavucontrol"    --> doFloat
+--    , title     =? "Print"          --> doFloat
     , className =? "Zoiper"         --> doFloat
+    , resource  =? "Dialog"         --> doFloat
     , resource  =? "desktop_window" --> doIgnore
-    , resource  =? "kdesktop"       --> doIgnore ]
-
+    , resource  =? "kdesktop"       --> doIgnore 
+    , role      =? "About"          --> doFloat]
+  where role = stringProperty "WM_WINDOW_ROLE"
 -- xmobarEscape = concatMap doubleLts
 --   where doubleLts '<' = "<<"
 --         doubleLts x   = [x]
@@ -591,8 +597,12 @@ myEventHook = mempty
 -- per-workspace layout choices.
 --
 -- By default, do nothing.
-myStartupHook = return ()
---myStartupHook = do
+--myStartupHook = return ()
+myStartupHook = do
+    spawn "xmbMonitorIMChanges"  -- Monitors for changes to the Input method
+    spawn "xmbSetPulseVol"  -- Initializes the pipe with the volume
+    spawn "xmbSetPulseMicVol"  -- Initializes the pipe with the volume
+    spawn "xmbGetNumArchUpd"  -- Initializes the pipe with the volume
 --    spawn "fcitx-autostart"
 --    spawnOnce "nitrogen --restore"
 
@@ -626,6 +636,7 @@ main = do
                         , ppTitle   = xmobarColor "lightblue"  "" . shorten 40
                         , ppVisible = xmobarColor "yellow" "" . wrap "<fn=1> " " </fn>"
                         , ppUrgent  = xmobarColor "red" "yellow"
+                        , ppOrder   = \(ws:_:t:_) -> [ws,t]
                         } 
                         -- >> UP.updatePointer (0.25, 0.25) (0.25, 0.25)
         } 
