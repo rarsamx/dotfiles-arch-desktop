@@ -355,6 +355,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((0,              xF86XK_Mail             ), spawn "thunderbird")     -- Open Mailreader
     , ((0,              xF86XK_HomePage         ), spawn "firefox")         -- Open Browser
     , ((0,              xF86XK_Documents        ), runInTerm "" "n3")   -- Open File mgr
+    , ((0,              xF86XK_Calculator       ), runInTerm "" "bc -l")           -- Calculator
 --    , ((0,              xF86XK_Documents        ), spawn "xterm -e 'tmuxc new-session n3'")       -- Open File mgr
     , ((0,              xK_Print                ), spawn "gnome-screenshot -i") -- Screenshot tool
     , ((shiftMask,      xK_Insert               ), spawn "gnome-screenshot -i") -- Screenshot tool
