@@ -2,12 +2,12 @@ Config {
 
    -- appearance
 --     font = "xft:Noto Sans:size=10:antialias:=true"
-     font = "xft:FontAwesome Regular:size=10:antialias:=true"
+     font = "xft:FontAwesome Regular:size=11:antialias:=true"
    , additionalFonts = [ 
-            "xft:FontAwesome Regular:size=10:bold:antialias:=true"
+            "xft:FontAwesome Regular:size=11:bold:antialias:=true"
         ,   "xft:Noto Sans:size=10:bold:antialias:=true"
         ,   "xft:Monospace:size=14:bold:antialias=true"
-        ,   "xft:Symbols Nerd Font:size=13"
+        ,   "xft:Symbols Nerd Font:size=14"
         ,   "xft:Ubuntu Mono:size=13"
         ,   "xft:Bitstream Vera Sans Mono:size=15:bold:antialias=true"
         ]
@@ -38,7 +38,7 @@ Config {
                     \<fc=lightblue><fn=1>%archupdates%</fn></fc>\
                 \</action>   \
                 \<action=`xterm -e htop`>\
-                    \%cpu% %k10temp%   \
+                    \%cpu% <fc=lightblue><fn=1>%cputemp%</fn></fc>°C   \
                     \%memory%\
                 \</action>   \
                 \%CYUL%   \
@@ -47,7 +47,7 @@ Config {
                 \</action>   \
                 \%date%   \
                 \<action=`fcitx-configtool`>\
-                    \<fn=4></fn> <fc=lightblue><fn=1>%im_pipe%</fn></fc> \
+                    \<fn=4></fn> <fc=lightblue><fn=1>%inputmethod%</fn></fc> \
                 \</action>"
 
   -- general behavior
@@ -75,7 +75,7 @@ Config {
    , commands = 
        [
         -- Workspaces
-          Run UnsafeStdinReader
+         Run UnsafeStdinReader
 
         -- wifi activity monitor
         , Run Wireless "wlan0"
@@ -97,7 +97,7 @@ Config {
         -- , Run Com "/home/papa/bin/xmbGetNumberOfArchUpdates.sh" [] "archupdates" 600
 
         -- Number of updates 
-        , Run PipeReader "/home/papa/.config/xmobar/archupd_pipe" "archupdates"
+        , Run PipeReader "/run/user/1000/archupd_pipe" "archupdates"
 
         -- cpu activity monitor
         , Run Cpu            [ "--template" , "<fn=4>\xf85a</fn><fn=1> <total></fn>%"
@@ -110,12 +110,16 @@ Config {
                              , "--align"    , "l"
                              ] 20
 
+        -- CPU temp 
+        , Run Com "/home/papa/bin/xmbGetCPUTemp" [] "cputemp" 100
+        -- , Run Com "echo 1" [] "cputemp" 100
+ 
         -- CPU temperature monitor for Radeon chips
-        , Run K10Temp "0000:00:18.3"
-                            [ "-t", "<fn=4>\xf2c9</fn> <fn=1><Tctl></fn>°C "
-                            , "-L", "70", "-H", "100"
-                            , "-l", "lightblue", "-n", "darkorange", "-h", "red"
-                            ] 20
+        -- , Run K10Temp "0000:00:18.3"
+        --                     [ "-t", "<fn=4>\xf2c9</fn> <fn=1><Tctl></fn>°C "
+        --                     , "-L", "70", "-H", "100"
+        --                     , "-l", "lightblue", "-n", "darkorange", "-h", "red"
+        --                     ] 20
 
         -- memory usage monitor
         , Run Memory         [ "--template" ,"<fn=4>\xe266</fn> <fn=1><usedratio></fn>%"
@@ -149,10 +153,10 @@ Config {
                              ] 18000
 
         -- Receives changes in volume by the script xmbSetPulseVol
-        , Run PipeReader "/home/papa/.config/xmobar/volume_pipe" "pulsevolume"
+        , Run PipeReader "/run/user/1000/volume_pipe" "pulsevolume"
  
         -- Receives changes in microphone volume by the script xmbSetPulseMicVol
-        , Run PipeReader "/home/papa/.config/xmobar/micvol_pipe" "pulsemicvol"
+        , Run PipeReader "/run/user/1000/micvol_pipe" "pulsemicvol"
  
         -- time and date indicator 
         --   (%F = y-m-d date, %a = day of week, %T = h:m:s time)
@@ -164,7 +168,7 @@ Config {
 --        , Run Com "/home/papa/bin/xmbGetCurrentIM.sh" [] "currim" 200
 
         -- Receives changes in volume by the script xmbSetPulseVol
-        , Run PipeReader "/home/papa/.config/xmobar/im_pipe" "im_pipe"
+        , Run PipeReader "/run/user/1000/im_pipe" "inputmethod"
  
 
         --
@@ -176,9 +180,6 @@ Config {
 --                             , "--high"     , "darkred"
 --                             ] 10
 
-        -- CPU temp 
-        --, Run Com "/home/papa/bin/xmbGetCPUTemp.sh" [] "cputemp" 10
- 
         -- network activity monitor (dynamic interface resolution)
         -- , Run DynNetwork     [ "--template" , "<dev>: D <tx>kB/s|U <rx>kB/s"
         --                      , "--Low"      , "1000"       -- units: B/s
