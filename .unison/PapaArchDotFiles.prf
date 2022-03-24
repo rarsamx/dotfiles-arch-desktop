@@ -1,0 +1,9 @@
+# Unison preferences
+fat = false
+ignore = Path ?*
+ignore = Path .cache
+ignore = Path .config/Microsoft
+ignore = Path .var/app/org.mozilla.Thunderbird
+label = Backup all the dot configuration files from the papa home directory
+root = /home/papa
+root = /media/Backup/PapaArchDotFiles

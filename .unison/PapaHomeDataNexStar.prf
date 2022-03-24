@@ -1,0 +1,14 @@
+# Unison preferences
+fat = false
+ignore = Path builds
+ignore = Path Downloads
+ignore = Path NoBackup
+ignore = Path tmp
+ignore = Path .cache
+ignore = Path .var/app/org.mozilla.Thunderbird
+ignore = Path .config/Microsof
+ignore = Path .unison
+ignore = Path .zoom
+label = Backup all the data from papa home filder without dot files
+root = /home/papa
+root = /run/media/papa/Backup-NS/papa

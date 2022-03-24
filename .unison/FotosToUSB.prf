@@ -1,0 +1,5 @@
+# Unison preferences
+label = Fotos
+root = /media/Data/Fotos
+root = /media/papa/USB_64GB/Fotos
+fat = true

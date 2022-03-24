@@ -1,0 +1,10 @@
+# Unison preferences
+fat = false
+ignore = Path builds
+ignore = Path Downloads
+ignore = Path NoBackup
+ignore = Path tmp
+ignore = Path .cache
+label = Backup all the data from papa home filder without dot files
+root = /home/papa
+root = /run/media/papa/Backup/papa
