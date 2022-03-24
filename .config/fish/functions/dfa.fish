@@ -20,8 +20,9 @@ function dfa -w 'df -h --output=source,fstype,size,used,avail,pcent,target -x tm
         end
         set NEWFSS $NEWFSS "$FSA"
     end
-    printf '%-11s%-6s%6s%6s%6s%5s %s\n' Filesystem Type Size Used Avail Use% "Mounted on"
+    set foutput (printf ' %-11s:%-6s:%6s:%6s:%6s:%5s:%s' Filesystem Type Size Used Avail Use% "Mounted on" )'\n'
     for FS in $NEWFSS
-        printf '%-11s%-6s%6s%6s%6s%5s %s\n' (string split -m6 " " $FS)
+        set foutput $foutput (printf '%-11s:%-6s:%6s:%6s:%6s:%5s:%s' (string split -m6 " " $FS))'\n'
     end
+    echo -e $foutput | column -t -s ":" -o ' '
 end
