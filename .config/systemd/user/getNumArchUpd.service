@@ -1,0 +1,6 @@
+[Unit]
+Description=Service to get the number of Pacman updates available
+
+[Service]
+ExecStart=/home/papa/bin/xmbGetNumArchUpd
+

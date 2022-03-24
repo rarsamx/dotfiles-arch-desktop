@@ -1,0 +1,10 @@
+[Unit]
+Description=Check number of Arch pacman updates daily
+
+[Timer]
+OnCalendar=daily
+Persistent=true
+
+[Install]
+WantedBy=timers.target
+
