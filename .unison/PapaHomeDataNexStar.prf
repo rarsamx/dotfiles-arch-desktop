@@ -11,4 +11,4 @@ ignore = Path .unison
 ignore = Path .zoom
 label = Backup all the data from papa home filder without dot files
 root = /home/papa
-root = /run/media/papa/Backup-NS/papa
+root = /run/media/papa/BACKUP_NS/papa
