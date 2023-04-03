@@ -62,7 +62,7 @@ myTerminal      = "xterm"
 --myTerminal      = "xterm -e tmux"
 
 -- The pfereffed editor program
-editor    = "gvimd" -- Wrapper for gvim to start a single instance
+pref_editor    = "gvimd" -- Wrapper for gvim to start a single instance
 
 -- Whether focus follows the mouse pointer.
 myFocusFollowsMouse :: Bool
@@ -270,7 +270,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((0 ,                  xK_Menu     ), shellPrompt defXPConfig )     -- launch shell prompt
 --    , ((modm .|. shiftMask,  xK_Return   ), spawn $ XMonad.terminal conf) -- launch a terminal
     , ((modm .|. shiftMask,  xK_Return   ), runInTerm "" "tmux")   -- Open Terminal with tmux
-    , ((modm,                xK_v        ), spawn editor     )            -- launch editor
+    , ((modm,                xK_v        ), spawn pref_editor     )            -- launch editor
 
     , ((modm,               xK_a        ), DW.selectWorkspace wsXPConfig)
     , ((modm .|. shiftMask, xK_a        ), DW.addWorkspacePrompt wsXPConfig )
