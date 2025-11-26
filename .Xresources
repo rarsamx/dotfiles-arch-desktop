@@ -4,9 +4,10 @@ XTerm.vt100.locale: false
 !Only if locale is not utf8
 !XTerm.vt100.utf8: true
 
-XTerm.vt100.faceName: Ubuntu Mono 
+!XTerm.vt100.faceName: Ubuntu Mono 
+XTerm.vt100.faceName: Cascadia Code PL 
 !XTerm.vt100.faceName: Source Sans Pro
-XTerm.vt100.faceSize: 13
+XTerm.vt100.faceSize: 11
 
 !Copy to Primary and Clipboard
 !<Btn1Up>: select-end(PRIMARY, CLIPBOARD, CUT_BUFFER0)
