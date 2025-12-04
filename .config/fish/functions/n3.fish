@@ -30,9 +30,9 @@ function n3 -w 'nnn -aAeRU' -d 'nnn with support nnn quit and change directory'
     # If is not running under X and it is not inside tmux, use gvim
     xhost &> /dev/null
     if test $status -eq 0 -a "$TERM" != "screen" -a -z "$TMUX" 
-        env VISUAL=gvimd nnn -aAeRU $argv
+        env VISUAL=gvimd nnn -aAeRUd $argv
     else
-        env VISUAL=vimd nnn -aAeRU $argv
+        env VISUAL=vimd nnn -aAeRUd $argv
     end
 
     if test -e $NNN_TMPFILE
