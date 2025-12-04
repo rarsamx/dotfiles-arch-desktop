@@ -1,0 +1,12 @@
+# Unison preferences
+ignore = BelowPath Documents/Papa/tmp
+label = Sync all the documents with the X1 laptop
+path = Documents
+path = Music
+path = Pictures
+path = Videos
+path = Downloads
+path = Scripts
+root = /home/papa
+root = ssh://papa@raullaptop
+sshargs = -C
