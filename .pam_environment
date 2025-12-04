@@ -1,27 +1,31 @@
-# Environment variables for fcitx
-# Note: moved them to .xinitrc as they only make sense in X sessions
-#GTK_IM_MODULE	DEFAULT=fcitx
-#QT_IM_MODULE	DEFAULT=fcitx
-#XMODIFIERS	DEFAULT=\@im=fcitx
-
-# Environment variables required for having java agree with GTK themes
-# Note: moved them to .xinitrc as they only make sense in X sessions
-#QT_QPA_PLATFORMTHEME    DEFAULT=qt5ct
-#JAVA_FONTS  DEFAULT=/usr/share/fonts/TTF
-#_JAVA_AWT_WM_NONREPARENTING DEFAULT=1
-##_JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on'
-#_JAVA_OPTIONS   DEFAULT='-Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel'
-
-# Enable colours and exit if text less than one page
-LESS        DEFAULT="-Ri --mouse --wheel-lines=3"
-EDITOR      DEFAULT=vimd
-VISUAL      DEFAULT=gvimd
-PAGER       DEFAULT=less
-
-# Environment variables used by the nnn file manager
-NNN_PLUG    DEFAULT="d:dragdrop;f:diffs;i:imgview;m:nmount-udisk;t:treeview;p:preview-tui"
-NNN_ARCHIVE DEFAULT="\\.(7z|a|ace|alz|arc|arj|bz|bz2|cab|cpio|deb|gz|jar|lha|lz|lzh|lzma|lzo|rar|rpm|rz|t7z|tar|tbz|tbz2|tgz|tlz|txz|tZ|tzo|war|xpi|xz|Z|zip)$"
-NNN_TRASH   DEFAULT=2
-NNN_BMS     DEFAULT="s:~/Documents/Papa/Statements;f:~/Documents/Papa/Languages/French/French Niv 8"
-NNN_FIFO    DEFAULT="/tmp/nnn.fifo"
-NNN_COLORS  DEFAULT="2356"
+# !!!!!!!!!!!!  
+THIS FILE HAS BEEN DEPRECATED
+## !!!!!!!!!!!!
+## 
+## Environment variables for fcitx
+## Note: moved them to .xinitrc as they only make sense in X sessions
+##GTK_IM_MODULE	DEFAULT=fcitx
+##QT_IM_MODULE	DEFAULT=fcitx
+##XMODIFIERS	DEFAULT=\@im=fcitx
+#
+## Environment variables required for having java agree with GTK themes
+## Note: moved them to .xinitrc as they only make sense in X sessions
+##QT_QPA_PLATFORMTHEME    DEFAULT=qt5ct
+##JAVA_FONTS  DEFAULT=/usr/share/fonts/TTF
+##_JAVA_AWT_WM_NONREPARENTING DEFAULT=1
+###_JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on'
+##_JAVA_OPTIONS   DEFAULT='-Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel'
+#
+## Enable colours and exit if text less than one page
+#LESS        DEFAULT="-Ri --mouse --wheel-lines=3"
+#EDITOR      DEFAULT=vimd
+#VISUAL      DEFAULT=gvimd
+#PAGER       DEFAULT=less
+#
+## Environment variables used by the nnn file manager
+#NNN_PLUG    DEFAULT="d:dragdrop;f:diffs;i:imgview;m:nmount-udisk;t:treeview;p:preview-tui"
+#NNN_ARCHIVE DEFAULT="\\.(7z|a|ace|alz|arc|arj|bz|bz2|cab|cpio|deb|gz|jar|lha|lz|lzh|lzma|lzo|rar|rpm|rz|t7z|tar|tbz|tbz2|tgz|tlz|txz|tZ|tzo|war|xpi|xz|Z|zip)$"
+#NNN_TRASH   DEFAULT=2
+#NNN_BMS     DEFAULT="s:~/Documents/Papa/Statements;d:~/Documents/Papa"
+#NNN_FIFO    DEFAULT="/tmp/nnn.fifo"
+#NNN_COLORS  DEFAULT="2356"
