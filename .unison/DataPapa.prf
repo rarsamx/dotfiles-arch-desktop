@@ -1,5 +1,0 @@
-# Unison preferences
-label = Backup Papa directory to ACER Laptop
-root = /home/papa/Documents
-root = ssh://papa@192.168.2.11/Documents
-sshargs = -C
