@@ -35,10 +35,15 @@ let &t_SI = "\e[5 q"
 let &t_SR = "\e[3 q"
 let &t_EI = "\e[2 q"
 
-" ===== Ensures defaults are being loaded
-unlet! skip_defaults_vim
-source $VIMRUNTIME/defaults.vim
-runtime! archlinux.vim
+"" ===== Ensures defaults are being loaded
+if !has('nvim')
+    "set runtimepath^=~.vim,~.vim/after
+    set runtimepath^=~/.vim
+    set viminfo+=n~/.vim/viminfo
+    unlet! skip_defaults_vim
+    source $VIMRUNTIME/defaults.vim
+    "runtime! archlinux.vim
+endif
 " =====
 
 " ===== Key mappings
@@ -52,8 +57,16 @@ nnoremap <silent> <CR> :nohl<CR><CR>
 " Map <Leader>s to open Startify
 nnoremap <Leader>s  :Startify<CR>
 " Map to cycle buffers
-nnoremap <Leader>b  :bn<CR>
-nnoremap <Leader>B  :bp<CR>
+nnoremap <Leader>n  :bn<CR>
+nnoremap <Leader>p  :bp<CR>
+nnoremap <Leader>d  :bd<CR>
+
+" Resize windows with operation keys
+" nnoremap + :vertical resize +10<CR>
+" nnoremap - :vertical resize -10<CR>
+" nnoremap * :resize -10<CR>
+" nnoremap / :resize +10<CR>
+
 
 " Map Y to act like D and C, i.e. to yank until EOL, rather than act as yy,
 " which is the default
@@ -80,18 +93,22 @@ Plugin 'VundleVim/Vundle.vim'
 
 " Add plugins here
 Plugin 'sheerun/vim-polyglot'
-"Plugin 'dag/vim-fish'
+""Plugin 'dag/vim-fish'
 Plugin 'tpope/vim-endwise'
 Plugin 'tpope/vim-commentary'
-Plugin 'tpope/vim-vinegar'
+" Commenting out to avoid the annoying unclosable directory browser I'm sing
+" netrw directly
+"Plugin 'tpope/vim-vinegar'
 Plugin 'tpope/vim-fugitive'
-Plugin 'mhinz/vim-startify'
+" I haven't been using startify, but will leave it here if I ever need
+"Plugin 'mhinz/vim-startify'
 Plugin 'itchyny/lightline.vim'
 Plugin 'mengelbrecht/lightline-bufferline'
-" Plugin 'jeetsukumaran/vim-buffergator'
+Plugin 'vimwiki/vimwiki'
+"Plugin 'jeetsukumaran/vim-buffergator'
 "Plugin 'felixhummel/setcolors.vim'
 "Plugin 'lilydjwg/colorizer' " Only enable it when needed
-" Plugin 'scrooloose/syntastic'
+"Plugin 'scrooloose/syntastic'
 
 call vundle#end()
 " ===== End Vim Bundle configuration
@@ -187,11 +204,16 @@ set whichwrap+=<,>,h,l,[,]
 set path+=**
 set wildmenu
 
+" Parameters for the file browser
 autocmd FileType netrw setl bufhidden=wipe
 " let g:netrw_banner=0
-let g:netrw_browse_split=0  " opens in prior window
+let g:netrw_browse_split=3  " opens in new tab
 " let g:netrw_altv=1          " opens splits to the right
-let g:netrw_liststyle=3     " tree view
+let g:netrw_liststyle=0     " thin view
+" Next line is so the bufers can close
+let g:netrw_fastbrowse=0
+let g:netrw_winsize=25
+let g:netrw_list_hide= '^\..*'
 " let g:netrw_list_hide=netrw_gitignore#Hide()
 " let g:netrw_list_hide.=',\(^\|\s\s\)\zs\.\S\+'
 
