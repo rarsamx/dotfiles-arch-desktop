@@ -19,7 +19,7 @@ Config {
 --   , fgColor =      "#ABABAB"
 --   , fgColor =      "#DEDEDE"
    , fgColor =      "#d3d7cf"
-   , position =     Top
+   , position =     TopSize C 99 30
 --   , border =       BottomB
 --   , borderColor =  "#333333"
    -- , borderColor =  "#646464"
@@ -29,26 +29,30 @@ Config {
    , sepChar =  "%"   -- delineator between plugin names and straight text
    , alignSep = "}{"  -- separator between left-right alignment
 
-   , template = "<fn=4></fn> %UnsafeStdinReader% }{ \
+   , template = "  <fn=4></fn> %UnsafeStdinReader% }{ \
                 \<action=`xterm -e wificonnect`>\
                     \%wlan0wi%\
                 \</action>   \
-                \<fn=4></fn> <fc=lightblue><fn=1>%redshiftparams%</fn></fc>   \
+                \<fn=4>󰃟</fn> <fc=lightblue><fn=1>%redshiftparams%</fn></fc>   \
                 \<action=`xterm -e pacupd`>\
                     \<fc=lightblue><fn=1>%archupdates%</fn></fc>\
                 \</action>   \
-                \<action=`xterm -e htop`>\
-                    \%cpu% <fc=lightblue><fn=1>%cputemp%</fn></fc>°C   \
-                    \%memory%\
-                \</action>   \
+                \<box type=HBoth width=1 color=lightgray>   \
+                    \<action=`xterm -e htop`>\
+                        \%cpu% <fc=lightblue><fn=1>%cputemp%</fn></fc>°C   \
+                        \%memory%\
+                    \</action>   \
+                \</box>   \
                 \%CYUL%   \
-                \<action=`pavucontrol`>\
-                    \%pulsevolume% %pulsemicvol%\
-                \</action>   \
+                \<box type=HBoth width=1 color=lightgray>   \
+                    \<action=`pavucontrol`>\
+                        \%pulsevolume% %pulsemicvol%\
+                    \</action>   \
+                \</box>   \
                 \%date%   \
                 \<action=`fcitx-configtool`>\
                     \<fn=4></fn> <fc=lightblue><fn=1>%inputmethod%</fn></fc> \
-                \</action>"
+                \</action>  "
 
   -- general behavior
    , lowerOnStart =     True    -- send to bottom of window stack on start
@@ -91,7 +95,7 @@ Config {
                              ] 20
 
         --Redshift Period 
-        , Run Com "/home/papa/bin/xmbGetRedshiftParams" [] "redshiftparams" 600
+        , Run Com "/home/papa/.local/bin/xmbGetRedshiftParams" [] "redshiftparams" 600
  
         -- -- Number of updates 
         -- , Run Com "/home/papa/bin/xmbGetNumberOfArchUpdates.sh" [] "archupdates" 600
@@ -100,7 +104,7 @@ Config {
         , Run PipeReader "/run/user/1000/archupd_pipe" "archupdates"
 
         -- cpu activity monitor
-        , Run Cpu            [ "--template" , "<fn=4>\xf85a</fn><fn=1> <total></fn>%"
+        , Run Cpu            [ "--template" , "<fn=4>\xf4bc</fn><fn=1> <total></fn>%"
                              , "--Low"      , "70"
                              , "--High"     , "90"
                              , "--low"      , "lightblue"
@@ -111,7 +115,7 @@ Config {
                              ] 20
 
         -- CPU temp 
-        , Run Com "/home/papa/bin/xmbGetCPUTemp" [] "cputemp" 100
+        , Run Com "/home/papa/.local/bin/xmbGetCPUTemp" [] "cputemp" 100
         -- , Run Com "echo 1" [] "cputemp" 100
  
         -- CPU temperature monitor for Radeon chips
@@ -160,7 +164,8 @@ Config {
  
         -- time and date indicator 
         --   (%F = y-m-d date, %a = day of week, %T = h:m:s time)
-        , Run Date           "<action=`firefox https://calendar.google.com/`>\
+        --, Run Date           "<action=`firefox https://calendar.google.com/`>\
+        , Run Date           "<action=`/usr/bin/chromium --profile-directory=Default --app-id=kjbdgfilnfhdoflbpgamdcdgpehopbep`>\
                                 \%a %b %d <fc=lightblue><fn=1>%R</fn></fc> \
                              \</action>" "date" 600
 
