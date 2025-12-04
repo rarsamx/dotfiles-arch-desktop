@@ -58,8 +58,8 @@ import qualified Data.Map        as M
 -- The preferred terminal program, which is used in a binding below and by
 -- certain contrib modules.
 --
-myTerminal      = "xterm"
---myTerminal      = "xterm -e tmux"
+--myTerminal      = "xterm"
+myTerminal      = "xterm -e tmux"
 
 -- The pfereffed editor program
 pref_editor    = "gvimd" -- Wrapper for gvim to start a single instance
@@ -85,7 +85,8 @@ myBorderWidth   = 1
 myModMask       = mod4Mask
 
 -- Default font for most things
-myFont = "xft:Ubuntu:size=11:antialias:=true"
+--myFont = "xft:Ubuntu:size=12:antialias:=true"
+myFont = "xft:FontAwesome Regular:size=12:antialias:=true"
 
 -- The default number of workspaces (virtual screens) and their names.
 -- By default we use numeric strings, but any string may be used as a
@@ -157,6 +158,7 @@ tsSound a = TS.treeselectAction a
 tsPower :: TS.TSConfig (X ()) -> X()
 tsPower a = TS.treeselectAction a
    [ Node (TS.TSNode "Restart Xmonad"   "" (spawn "xmonad --recompile; xmonad --restart"))  []
+   , Node (TS.TSNode "Lock"             "" (spawn "dm-tool switch-to-greeter"))  []           
    , Node (TS.TSNode "Logout"           "" (spawn "gracefulShutdown logout"))  []  
    , Node (TS.TSNode "Reboot"           "" (spawn "gracefulShutdown reboot"))  []
    , Node (TS.TSNode "Shutdown"         "" (spawn "gracefulShutdown shutdown"))  []           
@@ -266,16 +268,17 @@ confirm m f = do
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
     [ 
-      ((modm,                xK_p        ), spawn "dmenu_run")            -- launch dmenu
+--      ((modm,                xK_p        ), spawn "dmenu_run")            -- launch dmenu
+      ((modm,                xK_p        ), spawn "rofi -show drun -show-icons")            -- launch dmenu
     , ((0 ,                  xK_Menu     ), shellPrompt defXPConfig )     -- launch shell prompt
---    , ((modm .|. shiftMask,  xK_Return   ), spawn $ XMonad.terminal conf) -- launch a terminal
-    , ((modm .|. shiftMask,  xK_Return   ), runInTerm "" "tmux")   -- Open Terminal with tmux
+    , ((modm .|. shiftMask,  xK_Return   ), spawn $ XMonad.terminal conf) -- launch a terminal
+--    , ((modm .|. shiftMask,  xK_Return   ), runInTerm "" "tmux")   -- Open Terminal with tmux
     , ((modm,                xK_v        ), spawn pref_editor     )            -- launch editor
 
     , ((modm,               xK_a        ), DW.selectWorkspace wsXPConfig)
     , ((modm .|. shiftMask, xK_a        ), DW.addWorkspacePrompt wsXPConfig )
-    , ((modm,               xK_d        ), DW.renameWorkspace wsXPConfig) 
-    , ((modm,               xK_d        ), WN.renameWorkspace wsXPConfig) 
+   , ((modm,               xK_d        ), DW.renameWorkspace wsXPConfig) 
+--     , ((modm,               xK_d        ), WN.renameWorkspace wsXPConfig) 
     , ((modm .|. shiftMask, xK_d        ), DW.removeEmptyWorkspace)
     
     --  , ((modm .|. shiftMask, xK_p     ), spawn "gmrun")              -- launch gmrun (not installed)
@@ -355,6 +358,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((0,              xF86XK_Mail             ), spawn "thunderbird")     -- Open Mailreader
     , ((0,              xF86XK_HomePage         ), spawn "firefox")         -- Open Browser
     , ((0,              xF86XK_Documents        ), runInTerm "" "n3")   -- Open File mgr
+    , ((0,              xF86XK_Search           ), runInTerm "" "n3")   -- Open File mgr
     , ((0,              xF86XK_Calculator       ), runInTerm "" "bc -l")           -- Calculator
 --    , ((0,              xF86XK_Documents        ), spawn "xterm -e 'tmuxc new-session n3'")       -- Open File mgr
     , ((0,              xK_Print                ), spawn "gnome-screenshot -i") -- Screenshot tool
@@ -505,7 +509,7 @@ myLayout
 --  = avoidStruts ( tiled ||| wide ||| tabs ||| noBorders Full)
   = avoidStruts ( tall ||| wide ||| tabs ||| full )
   where
-    myWindowGap = 0 :: Integer
+    myWindowGap = 5 :: Integer
     -- default tiling algorithm partitions the screen into two panes
     tall    
       = renamed [Replace "Tall"] $ 
@@ -522,8 +526,9 @@ myLayout
 --      = renamed [Replace "Tabbed"] $ noBorders (tabbed shrinkText myTabConfig)
       = renamed [Replace "Tabbed"] $ tabbed shrinkText myTabConfig
       where
-        myTabConfig = def { activeColor = "#556064"
-                 , inactiveColor = "#2F3D44"
+        myTabConfig = def { inactiveColor = "#556064"
+                 , decoHeight = 30
+                 , activeColor = "#2F3D44"
                  , urgentColor = "#FDF6E3"
                  , activeBorderColor = "#454948"
                  , inactiveBorderColor = "#454948"
@@ -562,6 +567,7 @@ myManageHook = composeAll
     , className =? "Pavucontrol"    --> doFloat
 --    , title     =? "Print"          --> doFloat
     , className =? "Zoiper"         --> doFloat
+    , className =? "Gnome-screenshot"         --> doFloat
     , resource  =? "Dialog"         --> doFloat
     , resource  =? "desktop_window" --> doIgnore
     , resource  =? "kdesktop"       --> doIgnore 
@@ -604,7 +610,7 @@ myStartupHook = do
     spawn "xmbSetPulseVol"  -- Initializes the pipe with the volume
     spawn "xmbSetPulseMicVol"  -- Initializes the pipe with the volume
     spawn "xmbGetNumArchUpd"  -- Initializes the pipe with the volume
---    spawn "fcitx-autostart"
+--    spawn "fcitx-autostart" --Commented out because now we use Fcitx5
 --    spawnOnce "nitrogen --restore"
 
 ------------------------------------------------------------------------
