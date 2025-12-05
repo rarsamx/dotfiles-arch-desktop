@@ -1,0 +1,8 @@
+[Unit]
+Description=Service to get the number of Pacman updates available
+
+[Service]
+ExecStart=/home/papa/Scripts/bash/restorePersistentCache.sh
+
+[Install]
+WantedBy=default.target
