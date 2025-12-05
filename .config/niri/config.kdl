@@ -151,8 +151,8 @@ layout {
     // preset-window-heights { }
 
     // You can change the default width of the new windows.
-    //default-column-width { proportion 0.5; }
-    default-column-width { proportion 1.0; }
+    default-column-width { proportion 0.5; }
+    //default-column-width { proportion 1.0; }
     // If you leave the brackets empty, the windows themselves will decide their initial width.
     // default-column-width {}
 
@@ -356,6 +356,12 @@ window-rule {
     default-column-width {}
 }
 
+// This is the rule for the google calendar "app"
+window-rule {
+    match app-id="chrome-kjbdgfilnfhdoflbpgamdcdgpehopbep-Default"
+    default-column-width { proportion 0.5; }
+}
+
 window-rule {
     match app-id="Alacritty"
     opacity 0.95 
@@ -372,6 +378,7 @@ window-rule {
 window-rule {
     match app-id="firefox"
     open-on-workspace "browser"
+    default-column-width { proportion 1.0; }
 }
 
 window-rule {
