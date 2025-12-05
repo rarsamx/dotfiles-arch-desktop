@@ -1,8 +1,8 @@
 # Start X at login
 
-echo $(date "+%Y-%m-%d %T")" .config.fish start" >> ~/start.log
-
-echo $(date "+%Y-%m-%d %T")" .config.fish GTK_IM_MODULE= $GTK_IM_MODULE" >> ~/start.log
+#echo $(date "+%Y-%m-%d %T")" .config.fish start" >> ~/start.log
+#
+#echo $(date "+%Y-%m-%d %T")" .config.fish GTK_IM_MODULE= $GTK_IM_MODULE" >> ~/start.log
 ps $PPID >> ~/start.log
 if status is-login
 #
