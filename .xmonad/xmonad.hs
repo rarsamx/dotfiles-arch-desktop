@@ -58,8 +58,9 @@ import qualified Data.Map        as M
 -- The preferred terminal program, which is used in a binding below and by
 -- certain contrib modules.
 --
---myTerminal      = "xterm"
-myTerminal      = "xterm -e tmux"
+-- If running with tmux the runInTerm doesn't work
+myTerminal      = "xterm"
+--myTerminal      = "xterm -e tmux"
 
 -- The pfereffed editor program
 pref_editor    = "gvimd" -- Wrapper for gvim to start a single instance
