@@ -7,3 +7,5 @@ set -gx NNN_TRASH   1
 set -gx NNN_BMS     "s:~/Documents/Papa/Statements;l:~/Documents/Papa/Languages"
 set -gx NNN_FIFO    "/tmp/nnn.fifo"
 set -gx NNN_COLORS  "2356"
+set -gx NNN_OPENER  "/usr/bin/xdg-open"
+
