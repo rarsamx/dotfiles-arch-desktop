@@ -1,5 +1,7 @@
 # Unison preferences
 ignore = BelowPath Documents/Papa/tmp
+ignore = Name .git
+ignore = Name .gitdf
 label = Sync all the documents with the X1 laptop
 path = Documents
 path = Music
