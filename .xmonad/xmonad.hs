@@ -29,9 +29,7 @@ import XMonad.Util.Font (Align(..))
 import XMonad.Config.Gnome
 import XMonad.Actions.Plane
 import XMonad.Util.EZConfig
-import XMonad.Util.Run(spawnPipe)
 import qualified Data.Map as M
-import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.UrgencyHook
 import System.IO(Handle, hPutStrLn)
@@ -53,7 +51,6 @@ import XMonad.Actions.WorkspaceNames as WN
 -- import XMonad.Actions.UpdatePointer as UP
 
 import qualified XMonad.StackSet as W
-import qualified Data.Map        as M
 
 -- The preferred terminal program, which is used in a binding below and by
 -- certain contrib modules.
@@ -76,7 +73,7 @@ myClickJustFocuses = False
 
 -- Width of the window border in pixels.
 --
-myBorderWidth   = 1
+myBorderWidth   = 6
 
 -- modMask lets you specify which modkey you want to use. The default
 -- is mod1Mask ("left alt").  You may also consider using mod3Mask
@@ -122,10 +119,10 @@ myWorkspaces = [ Node "1" []
                                                                               
 -- Border colors for unfocused and focused windows, respectively.
 --
-myNormalBorderColor  = "#dddddd"
+myNormalBorderColor  = "#202020"
 --myFocusedBorderColor = "#ff0000"
 --myFocusedBorderColor = "#0000ff"
-myFocusedBorderColor = "#000000"
+myFocusedBorderColor = "#7fc8ff"
 
 ------------------------------------------------------------
 -- Tree select for sound sinks and sources 
@@ -159,7 +156,8 @@ tsSound a = TS.treeselectAction a
 tsPower :: TS.TSConfig (X ()) -> X()
 tsPower a = TS.treeselectAction a
    [ Node (TS.TSNode "Restart Xmonad"   "" (spawn "xmonad --recompile; xmonad --restart"))  []
-   , Node (TS.TSNode "Lock"             "" (spawn "dm-tool switch-to-greeter"))  []           
+--   , Node (TS.TSNode "Lock"             "" (spawn "dm-tool switch-to-greeter"))  []           
+   , Node (TS.TSNode "Lock"             "" (spawn "slock"))  []           
    , Node (TS.TSNode "Logout"           "" (spawn "gracefulShutdown logout"))  []  
    , Node (TS.TSNode "Reboot"           "" (spawn "gracefulShutdown reboot"))  []
    , Node (TS.TSNode "Shutdown"         "" (spawn "gracefulShutdown shutdown"))  []           
@@ -270,7 +268,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
     [ 
 --      ((modm,                xK_p        ), spawn "dmenu_run")            -- launch dmenu
-      ((modm,                xK_p        ), spawn "rofi -show drun -show-icons")            -- launch dmenu
+      ((modm,                xK_d        ), spawn "rofi -show drun -show-icons")            -- launch dmenu
     , ((0 ,                  xK_Menu     ), shellPrompt defXPConfig )     -- launch shell prompt
     , ((modm .|. shiftMask,  xK_Return   ), spawn $ XMonad.terminal conf) -- launch a terminal
 --    , ((modm .|. shiftMask,  xK_Return   ), runInTerm "" "tmux")   -- Open Terminal with tmux
@@ -278,7 +276,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
     , ((modm,               xK_a        ), DW.selectWorkspace wsXPConfig)
     , ((modm .|. shiftMask, xK_a        ), DW.addWorkspacePrompt wsXPConfig )
-   , ((modm,               xK_d        ), DW.renameWorkspace wsXPConfig) 
+--   , ((modm,               xK_d        ), DW.renameWorkspace wsXPConfig) 
 --     , ((modm,               xK_d        ), WN.renameWorkspace wsXPConfig) 
     , ((modm .|. shiftMask, xK_d        ), DW.removeEmptyWorkspace)
     
@@ -364,7 +362,8 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 --    , ((0,              xF86XK_Documents        ), spawn "xterm -e 'tmuxc new-session n3'")       -- Open File mgr
     , ((0,              xK_Print                ), spawn "gnome-screenshot -i") -- Screenshot tool
     , ((shiftMask,      xK_Insert               ), spawn "gnome-screenshot -i") -- Screenshot tool
-    
+    , ((0,              xF86XK_LogOff               ), spawn "slock") -- Lock the screen
+
     ------------------------- 
     -- Keyboard layout (only needed if not using fcitx)
     --    , ((modm,      xK_u     ), spawn "setxkbmap -layout us")    -- layout to US
