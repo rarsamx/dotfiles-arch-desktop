@@ -1,3 +1,4 @@
+"vim9script
 "------------------------------------------------------------
 " More examples at
 " url: HTTP://vim.wikia.com/wiki/Example_vimrc
@@ -28,7 +29,11 @@ set splitbelow
 
 " Highlight line when not editing
 set cursorline
-autocmd InsertLeave,InsertEnter * set cursorline!
+"autocmd InsertLeave,InsertEnter * set cursorline!
+augroup CursorToggle | autocmd! | autocmd InsertLeave,InsertEnter * set cursorline! | augroup END
+" =====
+
+set clipboard=unnamedplus
 
 " Change cursor share according to mode
 let &t_SI = "\e[5 q"
@@ -105,6 +110,9 @@ Plugin 'tpope/vim-fugitive'
 Plugin 'itchyny/lightline.vim'
 Plugin 'mengelbrecht/lightline-bufferline'
 Plugin 'vimwiki/vimwiki'
+"To dedit the niri config
+Plugin 'imsnif/kdl.vim'
+
 "Plugin 'jeetsukumaran/vim-buffergator'
 "Plugin 'felixhummel/setcolors.vim'
 "Plugin 'lilydjwg/colorizer' " Only enable it when needed
@@ -115,10 +123,16 @@ call vundle#end()
 
 " ===== Configurations for vim-fish plugin
 syntax enable
-autocmd FileType fish compiler fish
-autocmd FileType fish setlocal textwidth=79 
-autocmd FileType fish setlocal foldlevelstart=99 
-autocmd FileType fish setlocal foldmethod=expr
+augroup VimFishSettings | autocmd!
+    autocmd FileType fish compiler fish
+    autocmd FileType fish setl textwidth=79 foldlevelstart=99 foldmethod=expr
+augroup END
+
+" Force filetype detection for KDL documents
+"autocmd BufNewFile,BufRead *.kdl set filetype=kdl
+augroup KdlGroup | autocmd! | autocmd BufNewFile,BufRead *.kdl set filetype=kdl | augroup END
+
+
 " =====
 
 "" ===== Configuration for syntastic plugin
@@ -205,7 +219,10 @@ set path+=**
 set wildmenu
 
 " Parameters for the file browser
-autocmd FileType netrw setl bufhidden=wipe
+" ===== Parameters for the file browser
+"autocmd FileType netrw setl bufhidden=wipe
+augroup VimNetrwSettings | autocmd! | autocmd FileType netrw setl bufhidden=wipe | augroup END
+
 " let g:netrw_banner=0
 let g:netrw_browse_split=3  " opens in new tab
 " let g:netrw_altv=1          " opens splits to the right
