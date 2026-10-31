@@ -606,11 +606,12 @@ myEventHook = mempty
 -- By default, do nothing.
 --myStartupHook = return ()
 myStartupHook = do
-    spawn "xmbMonitorIMChanges"  -- Monitors for changes to the Input method
+    spawnOnce "xmbMonitorIMChanges"  -- Monitors for changes to the Input method
     spawn "xmbSetPulseVol"  -- Initializes the pipe with the volume
     spawn "xmbSetPulseMicVol"  -- Initializes the pipe with the volume
     spawn "xmbGetNumArchUpd"  -- Initializes the pipe with the volume
 --    spawn "fcitx-autostart" --Commented out because now we use Fcitx5
+    spawnOnce "fcitxt5 -d" --Commented out because now we use Fcitx5
 --    spawnOnce "nitrogen --restore"
 
 ------------------------------------------------------------------------
