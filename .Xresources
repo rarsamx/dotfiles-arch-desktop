@@ -26,6 +26,9 @@ XTerm.vt100.internalBorder: 10
 XTerm.vt100.borderWidth: 2
 !Xterm.vt100.rightScrollBar: true
 
+XTerm*inputMethod: fcitx
+XTerm*preeditType: OverTheSpot
+
 #include ".config/Xresources/myColors"
 !#include ".config/Xresources/origColors"
 !#include ".config/Xresources/solarizedColors"
