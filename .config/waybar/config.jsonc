@@ -166,7 +166,7 @@
     "custom/weather": {
         "format": "{}",
         "interval": 3600,                     // every hour
-        "exec": "curl -s \"wttr.in/montreal?format=%t+%f+%C\"" // # Request weather 
+        "exec": "curl -s \"wttr.in/montreal?format=%t+%f+%C\" | sed 's/+//g'" // # Request weather 
 //        "exec-if": "exit 0",                  // always run; consider advanced run conditions
 //        "on-click": "xterm -e 'fish' '-c pacupd'; pkill -SIGRTMIN+8 waybar", // update system
 //        "signal": 8
