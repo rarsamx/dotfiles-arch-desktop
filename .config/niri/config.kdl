@@ -3,9 +3,16 @@
 // Check the wiki for a full description of the configuration:
 // https://yalter.github.io/niri/Configuration:-Introduction
 
+// Added this section to let wayland handle fcitx
+//environment {
+//    GTK_IM_MODULE "wayland"
+//    QT_IM_MODULE "wayland"
+//}
+
 // Input device configuration.
 // Find the full list of options on the wiki:
 // https://yalter.github.io/niri/Configuration:-Input
+
 input {
     keyboard {
         xkb {
@@ -112,7 +119,13 @@ input {
     position x=1280 y=0
 }
 
+output "VGA-1" {
+    //off
+}
+
 output "HDMI-A-1" {
+    //off
+    mode "1920x1080@50.000"
     focus-at-startup
 }
 
@@ -302,6 +315,10 @@ spawn-sh-at-startup "xrdb ~/.Xresources"
 //spawn-at-startup "crystal-dock"
 // spawn-at-startup "firefox"
 // spawn-at-startup "keepassxc"
+//spawn-sh-at-startup "swayidle -w timeout 60 swaylock -f"
+//spawn-at-startup "swayidle" "-w" "before-sleep" "swaylock -f"
+spawn-at-startup "hypridle"
+spawn-at-startup "dbus-update-activation-environment" "--systemd" "WAYLAND_DISPLAY" "XDG_CURRENT_DESKTOP" "XDG_RUNTIME_DIR"
 
 // To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
 // spawn-sh-at-startup "qs -c ~/source/qs/MyAwesomeShell"
@@ -382,6 +399,22 @@ window-rule {
 }
 
 window-rule {
+    match app-id="chromium"
+    open-on-workspace "browser"
+    default-column-width { proportion 1.0; }
+}
+
+window-rule {
+    match app-id="sol"
+    default-column-width { proportion 1.0; }
+}
+
+window-rule {
+    match app-id="eu.betterbird.Betterbird"
+    default-column-width { proportion 1.0; }
+}
+
+window-rule {
     match app-id="KeePassXC"
     open-on-workspace "keepass"
     block-out-from "screen-capture"
@@ -443,7 +476,9 @@ binds {
     // Suggested binds for running programs: terminal, app launcher, screen locker.
     Mod+T hotkey-overlay-title="Open a Terminal: Xterm" { spawn "xterm" "-e" "tmux"; }
     // Mod+T hotkey-overlay-title="Open a Terminal: alacritty" { spawn "alacritty"; }
-    Mod+Shift+Return hotkey-overlay-title="Open a Terminal: Xterm" { spawn "xterm" "-e" "tmux"; }
+    //Mod+Shift+Return hotkey-overlay-title="Open a Terminal: Xterm" { spawn "xterm" "-e" "tmux"; }
+    //Mod+Shift+Return hotkey-overlay-title="Open a Terminal: foot" { spawn "alacritty" "-e" "tmux"; }
+    Mod+Shift+Return hotkey-overlay-title="Open a Terminal: foot" { spawn "footclient" "-e" "tmux"; }
     Mod+D hotkey-overlay-title="Run an Application: fuzzel" { spawn "rofi" "-show" "drun" "-show-icons"; }
     Mod+P hotkey-overlay-title="Run an Application: fuzzel" { spawn "fuzzel"; }
     /* Mod+D hotkey-overlay-title="Run an Application: fuzzel" { spawn "fuzzel"; } */
@@ -468,10 +503,13 @@ binds {
     Ctrl+XF86AudioLowerVolume allow-when-locked=true { spawn-sh "xmbSetPulseMicVol -5%"; }
     Ctrl+XF86AudioMute        allow-when-locked=true { spawn-sh "xmbSetPulseMicVol toggle"; }
 
-    XF86HomePage hotkey-overlay-title="Execute firefox" { spawn "firefox"; }
+    XF86HomePage hotkey-overlay-title="Execute Firefox" { spawn "firefox"; }
+    Ctrl+XF86HomePage hotkey-overlay-title="Execute Chromium" { spawn "chromium"; }
+    XF86Mail hotkey-overlay-title="Execute Betterbird" { spawn "/opt/betterbird/betterbird"; }
 
-    XF86Documents hotkey-overlay-title="Open nnn file manager" { spawn "xterm" "-e" "n3"; }
+    XF86Documents  hotkey-overlay-title="Open nnn file manager"           { spawn "xterm" "-e" "n3"; }
     XF86Calculator hotkey-overlay-title="Open the command line alculator" { spawn "xterm" "-e" "bc" "-l"; }
+    XF86LogOff     hotkey-overlay-title="Lock the session"                { spawn "swaylock"; } 
 
 // Example brightness key mappings for brightnessctl.
     // You can use regular spawn with multiple arguments too (to avoid going through "sh"),
@@ -652,6 +690,9 @@ binds {
     Mod+Ctrl+R { reset-window-height; }
     Mod+F { maximize-column; }
     Mod+Shift+F { fullscreen-window; }
+
+    // Reset monitors after sleep
+    Mod+Shift+D { spawn "sh" "-c" "niri msg action power-off-monitors; sleep 1; niri msg action power-on-monitors"; }
 
     // Expand the focused column to space not taken up by other fully visible columns.
     // Makes the column "fill the rest of the space".
