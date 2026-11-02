@@ -1,0 +1,55 @@
+[env]
+TERM = "xterm-256color"
+
+[window]
+padding = { x = 10, y = 10 }
+
+[font]
+size = 11.0
+#
+[font.normal]
+family = "Cascadia Mono PL"
+style = "Regular"
+
+[font.offset]
+x = 1
+y = 0
+
+[colors.primary]
+background = "#202020"
+foreground = "#cccccc"
+
+[colors.cursor]
+cursor = "#cccccc"
+
+# Normal colors (Dark Colors)
+[colors.normal]
+black   = "#606060"
+red     = "#cc0000"
+green   = "#4e9a06"
+yellow  = "#edd400"
+blue    = "#3465a4"
+magenta = "#92659a"
+cyan    = "#07c7ca"
+white   = "#d3d7cf"
+
+# Bright colors (Light colors)
+[colors.bright]
+black   = "#6e706b"
+red     = "#ef2929"
+green   = "#8ae234"
+yellow  = "#fce94f"
+blue    = "#729fcf"
+magenta = "#c19fbe"
+cyan    = "#63e9e9"
+white   = "#eeeeec"
+
+[[keyboard.bindings]]
+key = "C"
+mods = "Control|Shift"
+action = "Copy"
+
+[[keyboard.bindings]]
+key = "V"
+mods = "Control|Shift"
+action = "Paste"
